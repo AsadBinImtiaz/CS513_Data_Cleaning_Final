@@ -25,7 +25,7 @@ Data_Dir = 'Data/'
 print('Archive : '+Root_Dir+Data_Dir+in_Data)
 print('Unzip to: '+Root_Dir+Task_Dir+Curr_Task+'/'+Data_Dir)
 
-with zipfile.ZipFile(Root_Dir+Data_Dir+Raw_Data, 'r') as f:
+with zipfile.ZipFile(Root_Dir+Data_Dir+in_Data, 'r') as f:
     f.extractall(Root_Dir+Task_Dir+Curr_Task+'/'+Data_Dir)
 
 #END

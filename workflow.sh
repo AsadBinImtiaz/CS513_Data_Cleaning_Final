@@ -1,3 +1,4 @@
+#!/bin/bash
 echo "Start of Data Cleansing"
 
 cd Tasks
@@ -14,10 +15,10 @@ echo '* Extract Data with python to: Tasks/01_Initial_Assesment/Data'
 
 # Load in SQLLite to Explore
 echo '* Load in SQLLite to Explore in: Tasks/01_Initial_Assesment/Data/NYPL.db'
-#./"SQL/importdata.sh" /dev/null 2>&1
+./"SQL/importdata.sh" #> /dev/null 2>&1
 
 # Execute Expolore script
-echo '* Explore data using: Tasks/01_Initial_Assesment/SQL/Explore.sql'
+#echo '* Explore data using: Tasks/01_Initial_Assesment/SQL/Explore.sql'
 # ../../Tools/sqlite/sqlite3 Data/NYPL.db ".read SQL/Explore.sql" /dev/null 2>&1
 
 cd ..
@@ -48,9 +49,23 @@ echo '####################################'
 cd "03_Data_Cleansing_Other_Tools"
 
 echo '* Extract Open Refine Cleansed Data with python to: Tasks/03_Data_Cleansing_Other_Tools/Data'
-python "Python/ExtractData.py" > /dev/null 2>&1
+#python "Python/ExtractData.py" > /dev/null 2>&1
 
-python "Python/ZipTaskData.py" > /dev/null 2>&1
+echo '    Processing Menu.csv'
+#python "Python/Menu.py" #> /dev/null 2>&1
+
+echo '    Processing Dish.csv'
+#python "Python/Dish.py" #> /dev/null 2>&1
+
+echo '    Processing MenuItem.csv'
+#python "Python/MenuItem.py" #> /dev/null 2>&1
+
+echo '    Processing MenuPage.csv'
+#python "Python/MenuPage.py" #> /dev/null 2>&1
+
+echo '* Saving Zip Archive to: Tasks/03_Data_Cleansing_Other_Tools/Data'
+#python "Python/ZipTaskData.py" > /dev/null 2>&1
+
 cd ..
 
 echo '####################################'
@@ -59,6 +74,10 @@ echo '####################################'
 
 cd "04_Developing_Relational_Schema"
 python "Python/ExtractData.py" > /dev/null 2>&1
+
+# Load in SQLLite to Explore
+echo '* Load in SQLLite to Explore in: Tasks/04_Developing_Relational_Schema'
+./"SQL/importdata.sh" 
 
 python "Python/ZipTaskData.py" > /dev/null 2>&1
 cd ..
