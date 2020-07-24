@@ -1,6 +1,6 @@
 
 
-# @BEGIN main
+# @BEGIN OverallWorkflow
 # @IN Dish_File @URI file:Data/Dish.csv
 # @IN Menu_File @URI file:Data/Menu.csv
 # @IN MenuItem_File @URI file:Data/MenuItem.csv
@@ -176,4 +176,4 @@
 
 
 
-# @END main
+# @END OverallWorkflow
