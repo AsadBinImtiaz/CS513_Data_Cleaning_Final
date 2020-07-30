@@ -3,6 +3,16 @@ DROP TABLE IF EXISTS Menu;
 DROP TABLE IF EXISTS MenuItem;
 DROP TABLE IF EXISTS MenuPage;
 
+
+# @BEGIN SQLWorkflow
+
+
+# @BEGIN ImportDatafromCSV
+# @IN Dish @URI file:Data/Dish.csv
+# @IN Menu @URI file:Data/Menu.csv
+# @IN MenuPage @URI file:Data/MenuPage.csv
+# @IN MenuItem @URI file:Data/MenuItem.csv
+
 .mode csv
 
 .import Data/Dish.csv Dish
@@ -20,6 +30,22 @@ SELECT '   MenuPage file added, Total MenuPages = ' || COUNT(*) AS MenuPage_Coun
 .import Data/MenuItem.csv MenuItem
 
 SELECT '   MenuItem file added, Total MenuItems = ' || COUNT(*) AS MenuItem_Count FROM MenuItem;
+
+
+# @OUT Dish 
+# @OUT Menu  
+# @OUT MenuPage
+# @OUT MenuItem  
+# @END ImportDatafromCSV
+
+
+
+
+# @BEGIN CreateDish_New
+# @IN Dish 
+# @OUT Dish_New 
+# @END CreateDish_New
+
 
 DROP TABLE IF EXISTS Dish_New 
 ;
@@ -52,6 +78,12 @@ SELECT
         ,highest_price
 FROM DISH
 ;
+
+
+# @BEGIN TrimNameDish_New
+# @IN Dish_New 
+# @OUT Dish_NewV1 
+# @END TrimNameDish_New
 
 UPDATE DISH_New SET NAME = TRIM('Nelson''S Blood (Cocktail)                                              ') WHERE ID = 402726	;
 UPDATE DISH_New SET NAME = TRIM('Tio Pepe Sherry                                                         ') WHERE ID = 408306	;
@@ -158,6 +190,14 @@ UPDATE DISH_New SET NAME = TRIM('Virgin Rum Julep                               
 UPDATE DISH_New SET NAME = TRIM('Good Earth Tostada                                                      ') WHERE ID = 517739	;
 UPDATE DISH_New SET NAME = TRIM('Good Earth Tostada                                                      ') WHERE ID = 490886	;
 
+
+# @BEGIN UpdateDish_NewV1
+# @IN Dish_NewV1 
+# @PARAM last_appeared=currentYear_WHERE_last_appeared>currentYear
+# @PARAM last_appeared=first_appeared_WHERE_last_appeared<first_appeared
+# @PARAM first_appeared=currentYear_WHERE_first_appeared>currentYear
+
+
 UPDATE Dish_New
 SET last_appeared = first_appeared
 WHERE last_appeared < first_appeared
@@ -178,6 +218,16 @@ SELECT 'Dish table fixed'
 
 drop table IF EXISTS Menu_New 
 ;
+
+# @OUT Dish_NewV2 
+# @END UpdateDish_NewV1
+
+
+
+# @BEGIN CreateMenu_New
+# @IN Menu 
+# @OUT Menu_New 
+# @END CreateMenu_New
 
 CREATE TABLE IF NOT EXISTS Menu_New 
 (
@@ -225,6 +275,15 @@ SELECT
 ,dish_count
 FROM Menu
 ;
+
+
+
+
+
+# @BEGIN FixMissingVals_Menu_New
+# @IN Menu_New
+# @PARAM sponsor_WHERE_Values_Are_Missing
+# @PARAM name_WHERE_Values_Are_Missing
 
 UPDATE Menu_New
 Set Sponsor = '[Not Given]'
@@ -283,8 +342,22 @@ where Sponsor is null
 SELECT 'Menu Table fixed'
 ;
 
+
+
+# @OUT Menu_NewV1 
+# @END FixMissingVals_Menu_New
+
 DROP TABLE IF EXISTS MenuPage_New
 ;
+
+
+
+
+# @BEGIN CreateMenuPage_New
+# @IN MenuPage 
+# @OUT MenuPage_New 
+# @END CreateMenuPage_New
+
 
 CREATE TABLE IF NOT EXISTS MenuPage_New
 (
@@ -315,6 +388,13 @@ FROM MenuPage
 ;
 
 
+# @BEGIN UpdateMenuPage_New_PageNumber
+# @IN MenuPage_New 
+# @PARAM page_number_where_=-1
+
+
+
+
 WITH X as
 (
         select id, Row_Number() over (partition by menu_id order by id) new_page_id
@@ -328,8 +408,20 @@ where id in (select id from x)
 SELECT 'MenuPage Table Fixed'
 ;
 
+
+# @OUT MenuPage_NewV1 
+# @END UpdateMenuPage_New_PageNumber
+
+
+
 DROP TABLE IF EXISTS MenuItem_New
 ;
+
+
+# @BEGIN CreateMenuItem_New
+# @IN MenuItem 
+# @OUT MenuItem_New 
+# @END CreateMenuItem_New
 
 CREATE TABLE IF NOT EXISTS MenuItem_New
 (
@@ -362,6 +454,18 @@ SELECT
 FROM MenuItem
 ;
 
+
+
+# @BEGIN UpdateMenuItem_New
+# @IN MenuItem_New 
+# @PARAM high_price_=_price_WHERE_price_>_high_price
+# @PARAM high_price_=_price_WHERE_price_is_null
+# @PARAM updated_at_=_created_at_WHERE_created_at_>_updated_at
+
+
+
+
+
 UPDATE MenuItem_New
 SET high_price = price
 WHERE price > high_price
@@ -380,6 +484,23 @@ and price is not null
 
 SELECT 'MenuItem Table Fixed'
 ;
+
+
+
+# @OUT MenuItem_NewV1 
+# @END CreateMenuItem_New
+
+
+
+
+# @BEGIN ConsolidatingDishNames
+# @IN Dish_NewV2
+# @IN MenuItem_NewV1 
+
+# @OUT Dish_NewV3
+# @OUT MenuItem_NewV2 
+# @END ConsolidatingDishNames
+
 
 -- Consolidate Dish Names
 DROP TABLE IF EXISTS Dish_Temp
@@ -719,6 +840,20 @@ select 'Removing orphan entities'
 DROP TABLE IF EXISTS DISH_Temp
 ;
 
+# @BEGIN RemovingOrphanEntities
+
+# @IN MenuItem_NewV2 
+# @IN MenuPage_NewV1
+# @PARAM MenuItem.dish_id
+# @PARAM MenuItem.menu_page_id
+# @PARAM MenuPage.menu_id
+
+# @OUT MenuItem_NewV3 
+# @OUT MenuPage_NewV2
+# @END RemovingOrphanEntities
+
+
+
 DELETE FROM MenuItem_New 
 WHERE dish_id in (select dish_id from MenuItem_New 
 where dish_id not in (select id from Dish_New)
@@ -738,6 +873,24 @@ WHERE menu_page_id in
 
 select 'Fixing RI'
 ;
+
+
+
+
+
+
+# @BEGIN FixingRefrentialIntegrityDish
+
+# @IN Dish_NewV3 
+# @PARAM times_appeared
+# @PARAM menus_appeared
+# @PARAM first_appeared
+# @PARAM last_appeared
+# @PARAM lowest_price
+
+# @OUT Dish_NewV4 
+# @END FixingRefrentialIntegrityDish
+
 
 WITH X as
 (
@@ -852,6 +1005,19 @@ Set
 WHERE id IN (Select id from X);
 
 
+
+
+
+
+# @BEGIN FixingRefrentialIntegrityMenuItem
+
+# @IN MenuItem_NewV3 
+# @PARAM high_price
+
+# @OUT MenuItem_NewV4 
+# @END FixingRefrentialIntegrityMenuItem
+
+
 /* Correcting high_price in MenuItem (Query Takes Longer)*/
 
 WITH X as
@@ -863,6 +1029,17 @@ Set
         high_price  = (SELECT price from X where X.id = MenuItem_New.id)
 WHERE id IN (Select id from X);
 
+
+
+# @BEGIN FixingRefrentialIntegrityMenu
+
+# @IN Menu_NewV1 
+# @PARAM dish_count
+# @PARAM page_count
+
+
+# @OUT Menu_NewV2 
+# @END FixingRefrentialIntegrityMenu
 
 
 /*Correcting Dish Count in Menu*/
@@ -905,5 +1082,21 @@ Set
 WHERE id IN (Select MenuID from X)
 ;
 
+
+# @BEGIN SaveNYPL.db
+# @IN Menu_NewV2 
+# @IN MenuItem_NewV4
+# @IN Dish_NewV4 
+# @IN MenuPage_NewV2
+
+
+# @OUT NYPL.db 
+
+# @END SaveNYPL.db
+
+
 .save DATA/NYPL.db
+
+
+# @END SQLWorkflow
 
