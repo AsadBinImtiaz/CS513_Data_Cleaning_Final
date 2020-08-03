@@ -5,905 +5,681 @@ DROP TABLE IF EXISTS MenuPage;
 
 .mode csv
 
-.import Data/Dish.csv Dish
-
-SELECT '   Dish file added, Total Dishes = ' || COUNT(*) AS Dish_Count FROM Dish;
-
-.import Data/Menu.csv Menu
-
-SELECT '   Menu file added, Total Menus = ' || COUNT(*) AS Menu_Count FROM Menu;
-
-.import Data/MenuPage.csv MenuPage
-
-SELECT '   MenuPage file added, Total MenuPages = ' || COUNT(*) AS MenuPage_Count FROM MenuPage;
-
-.import Data/MenuItem.csv MenuItem
-
-SELECT '   MenuItem file added, Total MenuItems = ' || COUNT(*) AS MenuItem_Count FROM MenuItem;
-
-DROP TABLE IF EXISTS Dish_New 
+SELECT '    Truncating Dish Names Longer than 500 Characters'
 ;
+/*
+UPDATE Dish SET NAME = TRIM('Nelson''S Blood (Cocktail)                                              ') WHERE ID = 402726	;
+UPDATE Dish SET NAME = TRIM('Tio Pepe Sherry                                                         ') WHERE ID = 408306	;
+UPDATE Dish SET NAME = TRIM('Our Game Plan                                                           ') WHERE ID = 417683	;
+UPDATE Dish SET NAME = TRIM('Dessert - Gewurztraminer Hugel                                          ') WHERE ID = 418332	;
+UPDATE Dish SET NAME = TRIM('Rijsttafel - The Rice-Table                                             ') WHERE ID = 418709	;
+UPDATE Dish SET NAME = TRIM('Croissants Au Jambon - - A Crescent Pastry With Ham                     ') WHERE ID = 419261	;
+UPDATE Dish SET NAME = TRIM('Souffle Grand Marnier, Les Petit Fours                                  ') WHERE ID = 419302	;
+UPDATE Dish SET NAME = TRIM('The Wines By Gordon Bass                                                ') WHERE ID = 419313	;
+UPDATE Dish SET NAME = TRIM('Dole De Sion - Grossenbacher (Dole Duh See-Ohn)                         ') WHERE ID = 419323	;
+UPDATE Dish SET NAME = TRIM('Chateau Petrus 1959 - Chateau Bottled (Shah-Toe Peh-Trews)              ') WHERE ID = 419325	;
+UPDATE Dish SET NAME = TRIM('Sylvaner From Alsace France                                             ') WHERE ID = 420659	;
+UPDATE Dish SET NAME = TRIM('Club Breakfast No. 3                                                    ') WHERE ID = 421319	;
+UPDATE Dish SET NAME = TRIM('Club Breakfast No. 4                                                    ') WHERE ID = 421340	;
+UPDATE Dish SET NAME = TRIM('Club Breakfast No. 5                                                    ') WHERE ID = 421341	;
+UPDATE Dish SET NAME = TRIM('Donahoe''S Farm Style Chicken Dinner                                    ') WHERE ID = 430379	;
+UPDATE Dish SET NAME = TRIM('Hobeau''S Or Nodelini''S.                                               ') WHERE ID = 438468	;
+UPDATE Dish SET NAME = TRIM('Hobeau''S Or Nodelini''S.                                               ') WHERE ID = 438470	;
+UPDATE Dish SET NAME = TRIM('L''Appetite Vient En Mangeant                                           ') WHERE ID = 454063	;
+UPDATE Dish SET NAME = TRIM('Patrons Meal                                                            ') WHERE ID = 454077	;
+UPDATE Dish SET NAME = TRIM('Patrons Meal                                                            ') WHERE ID = 454078	;
+UPDATE Dish SET NAME = TRIM('Patrons Meal                                                            ') WHERE ID = 454079	;
+UPDATE Dish SET NAME = TRIM('A Teas Of Excellent Quality                                             ') WHERE ID = 454095	;
+UPDATE Dish SET NAME = TRIM('A Teas Of Excellent Quality                                             ') WHERE ID = 454096	;
+UPDATE Dish SET NAME = TRIM('Buffet - Quality And The Best Obtainable                                ') WHERE ID = 454140	;
+UPDATE Dish SET NAME = TRIM('The Early Morn                                                          ') WHERE ID = 454154	;
+UPDATE Dish SET NAME = TRIM('The Early Morn                                                          ') WHERE ID = 454155	;
+UPDATE Dish SET NAME = TRIM('The Early Morn                                                          ') WHERE ID = 454156	;
+UPDATE Dish SET NAME = TRIM('Zakuska - Hors D''Oeuvres                                               ') WHERE ID = 469753	;
+UPDATE Dish SET NAME = TRIM('Tour D''Argent Of Paris                                                 ') WHERE ID = 469775	;
+UPDATE Dish SET NAME = TRIM('Sydney Smith Afternoon Tea                                              ') WHERE ID = 471390	;
+UPDATE Dish SET NAME = TRIM('Dual Purpose Buffet                                                     ') WHERE ID = 486297	;
+UPDATE Dish SET NAME = TRIM('Broasted Chicken Ala Skillet Dinner                                     ') WHERE ID = 506183	;
+UPDATE Dish SET NAME = TRIM('Peking Duck In The Great Tradition Of Chinese Haute Cuisine             ') WHERE ID = 514868	;
+UPDATE Dish SET NAME = TRIM('Charcoal Broiled 1-Lb. Short Loin Steak                                 ') WHERE ID = 427545	;
+UPDATE Dish SET NAME = TRIM('Souffle Grand Marnier, Les Petit Fours                                  ') WHERE ID = 419300	;
+UPDATE Dish SET NAME = TRIM('The Early Morn                                                          ') WHERE ID = 454152	;
+UPDATE Dish SET NAME = TRIM('The Early Morn                                                          ') WHERE ID = 454153	;
+UPDATE Dish SET NAME = TRIM('Meal At The Sepasco Trail And King''S Highway                           ') WHERE ID = 486298	;
+UPDATE Dish SET NAME = TRIM('Nelson''S Blood (Cocktail)                                              ') WHERE ID = 402723	;
+UPDATE Dish SET NAME = TRIM('Beef And Cheese - Bonnes-Mares - 1959                                   ') WHERE ID = 418331	;
+UPDATE Dish SET NAME = TRIM('Selle De Veau, Bouquetiere De Legumes                                   ') WHERE ID = 419279	;
+UPDATE Dish SET NAME = TRIM('Charcoal Grilled Planked Steak Or Chicken Dinner                        ') WHERE ID = 430396	;
+UPDATE Dish SET NAME = TRIM('British Airways Wines                                                   ') WHERE ID = 436648	;
+UPDATE Dish SET NAME = TRIM('Buffet - Quality And The Best Obtainable                                ') WHERE ID = 454130	;
+UPDATE Dish SET NAME = TRIM('Beware Of Fakirs                                                        ') WHERE ID = 454174	;
+UPDATE Dish SET NAME = TRIM('Jake''S Fresh Sheet                                                     ') WHERE ID = 469646	;
+UPDATE Dish SET NAME = TRIM('Jake''S Fresh Sheet                                                     ') WHERE ID = 469647	;
+UPDATE Dish SET NAME = TRIM('Zakuska Of Fish                                                         ') WHERE ID = 469755	;
+UPDATE Dish SET NAME = TRIM('Red Snapper Fillet On Salsify Sauce                                     ') WHERE ID = 469761	;
+UPDATE Dish SET NAME = TRIM('Lamb 3 Ways                                                             ') WHERE ID = 469764	;
+UPDATE Dish SET NAME = TRIM('Lamb 3 Ways                                                             ') WHERE ID = 469766	;
+UPDATE Dish SET NAME = TRIM('Fallow Venison Medallion, A La Minute                                   ') WHERE ID = 469773	;
+UPDATE Dish SET NAME = TRIM('Chateau De La Ragotiere 1992 To Accompany This Dish                     ') WHERE ID = 471365	;
+UPDATE Dish SET NAME = TRIM('Autumn Applefest Breakfast                                              ') WHERE ID = 512916	;
+UPDATE Dish SET NAME = TRIM('Clos Vougeot, 1961 (Louis Jadot - Estate Bottled)                       ') WHERE ID = 516524	;
+UPDATE Dish SET NAME = TRIM('Bestimmte Stoffe                                                        ') WHERE ID = 517040	;
+UPDATE Dish SET NAME = TRIM('e Have The Finest Vintages Available In Imported Wines                  ') WHERE ID = 417938	;
+UPDATE Dish SET NAME = TRIM('Dezaley- 1964 - Grossenbacher (Day-Za-Lay)                              ') WHERE ID = 419311	;
+UPDATE Dish SET NAME = TRIM('Pommery Brut 1961 - En Methusalems                                      ') WHERE ID = 419314	;
+UPDATE Dish SET NAME = TRIM('Chateau D''Auvernier, Chateau Bottled Neuchatel (Shah-Toe Doh-Vern-Yerr)') WHERE ID = 419318	;
+UPDATE Dish SET NAME = TRIM('Dole De Sion - Grossenbacher (Dole Duh See-Ohn)                         ') WHERE ID = 419321	;
+UPDATE Dish SET NAME = TRIM('Club Breakfast No. 2                                                    ') WHERE ID = 421318	;
+UPDATE Dish SET NAME = TRIM('Diamond-Back-Terrapin                                                   ') WHERE ID = 421850	;
+UPDATE Dish SET NAME = TRIM('Fried Chicken - Negro Cooks                                             ') WHERE ID = 421853	;
+UPDATE Dish SET NAME = TRIM('Chateaubriand Strasbourgeoise                                           ') WHERE ID = 427609	;
+UPDATE Dish SET NAME = TRIM('Booze At D.B.                                                           ') WHERE ID = 428470	;
+UPDATE Dish SET NAME = TRIM('Ain''T She Sweet                                                        ') WHERE ID = 428483	;
+UPDATE Dish SET NAME = TRIM('From Our Charcoal Hearth                                                ') WHERE ID = 429473	;
+UPDATE Dish SET NAME = TRIM('Lanson Black Label Champagne                                            ') WHERE ID = 436650	;
+UPDATE Dish SET NAME = TRIM('J. Lohr Riverstone Chardonnay 1989                                      ') WHERE ID = 436655	;
+UPDATE Dish SET NAME = TRIM('Festival Of The Season                                                  ') WHERE ID = 438463	;
+UPDATE Dish SET NAME = TRIM('Coffee - Our Original Blend                                             ') WHERE ID = 454105	;
+UPDATE Dish SET NAME = TRIM('Quilcene Opysters*, Jake''S Fresh Sheet                                 ') WHERE ID = 469642	;
+UPDATE Dish SET NAME = TRIM('Portobello Mushroom And Le Seurre Baby Peas                             ') WHERE ID = 469756	;
+UPDATE Dish SET NAME = TRIM('Lamb 3 Ways                                                             ') WHERE ID = 469762	;
+UPDATE Dish SET NAME = TRIM('The Keller Family''S Special Steak                                      ') WHERE ID = 470642	;
+UPDATE Dish SET NAME = TRIM('The Beekman Arms                                                        ') WHERE ID = 486296	;
+UPDATE Dish SET NAME = TRIM('The Earth Burger. Vegetarian                                            ') WHERE ID = 490882	;
+UPDATE Dish SET NAME = TRIM('The Earth Burger. Vegetarian                                            ') WHERE ID = 490883	;
+UPDATE Dish SET NAME = TRIM('Barbecued Salmon: Done Indian Style                                     ') WHERE ID = 512180	;
+UPDATE Dish SET NAME = TRIM('Barbecued Salmon: Done Indian Style                                     ') WHERE ID = 512181	;
+UPDATE Dish SET NAME = TRIM('Bestimmte Stoffe                                                        ') WHERE ID = 517038	;
+UPDATE Dish SET NAME = TRIM('Bestimmte Stoffe                                                        ') WHERE ID = 517039	;
+UPDATE Dish SET NAME = TRIM('Bestimmte Stoffe                                                        ') WHERE ID = 517037	;
+UPDATE Dish SET NAME = TRIM('Incomparable Crepe Ricardo - Dessert Supreme!                           ') WHERE ID = 517202	;
+UPDATE Dish SET NAME = TRIM('Chateau Cheval Blanc, 1961 (Chateau Bottled)                            ') WHERE ID = 516523	;
+UPDATE Dish SET NAME = TRIM('Breaded Veal Parmigiana, Tender Veal Breaded                            ') WHERE ID = 504229	;
+UPDATE Dish SET NAME = TRIM('Breaded Veal Parmigiana, Tender Veal Breaded                            ') WHERE ID = 504230	;
+UPDATE Dish SET NAME = TRIM('All Entrees Served With Choice Of Potato, Breads, Butter                ') WHERE ID = 470664	;
+UPDATE Dish SET NAME = TRIM('All Entrees Served With Choice Of Potato, Breads, Butter                ') WHERE ID = 470665	;
+UPDATE Dish SET NAME = TRIM('Baked Lasagne, Wide Egg Noodle                                          ') WHERE ID = 504227	;
+UPDATE Dish SET NAME = TRIM('Baked Lasagne, Wide Egg Noodle                                          ') WHERE ID = 504228	;
+UPDATE Dish SET NAME = TRIM('Beware Of Fakirs                                                        ') WHERE ID = 454169	;
+UPDATE Dish SET NAME = TRIM('Beware Of Fakirs                                                        ') WHERE ID = 454170	;
+UPDATE Dish SET NAME = TRIM('Coffee - Our Original Blend                                             ') WHERE ID = 454103	;
+UPDATE Dish SET NAME = TRIM('Coffee - Our Original Blend                                             ') WHERE ID = 454104	;
+UPDATE Dish SET NAME = TRIM('Buffet - Quality And The Best Obtainable                                ') WHERE ID = 454118	;
+UPDATE Dish SET NAME = TRIM('Buffet - Quality And The Best Obtainable                                ') WHERE ID = 454119	;
+UPDATE Dish SET NAME = TRIM('Buffet - Quality And The Best Obtainable                                ') WHERE ID = 454128	;
+UPDATE Dish SET NAME = TRIM('Virgin Planters Punch- 1 Tsp                                            ') WHERE ID = 419657	;
+UPDATE Dish SET NAME = TRIM('Virgin Planters Punch- 1 Tsp                                            ') WHERE ID = 419658	;
+UPDATE Dish SET NAME = TRIM('Virgin Rum Julep                                                        ') WHERE ID = 419748	;
+UPDATE Dish SET NAME = TRIM('Good Earth Tostada                                                      ') WHERE ID = 517739	;
+UPDATE Dish SET NAME = TRIM('Good Earth Tostada                                                      ') WHERE ID = 490886	;
+*/
 
-CREATE TABLE IF NOT EXISTS Dish_New 
-(
-        id INTEGER NOT NULL PRIMARY KEY, 
-        name TEXT NOT NULL, 
-        menus_appeared INTEGER NULL, 
-        times_appeared INTEGER NULL, 
-        first_appeared INTEGER NULL, 
-        last_appeared  INTEGER NULL, 
-        lowest_price   NUMERIC NULL, 
-        highest_price  NUMERIC NULL
-)
-;
-
-DELETE FROM Dish_New
-;
-
-INSERT INTO Dish_New 
-SELECT 
-         id
-        ,NULLIF(name,'') 
-        ,menus_appeared
-        ,times_appeared
-        ,first_appeared
-        ,last_appeared
-        ,lowest_price
-        ,highest_price
-FROM DISH
-;
-
-UPDATE DISH_New SET NAME = TRIM('Nelson''S Blood (Cocktail)                                              ') WHERE ID = 402726	;
-UPDATE DISH_New SET NAME = TRIM('Tio Pepe Sherry                                                         ') WHERE ID = 408306	;
-UPDATE DISH_New SET NAME = TRIM('Our Game Plan                                                           ') WHERE ID = 417683	;
-UPDATE DISH_New SET NAME = TRIM('Dessert - Gewurztraminer Hugel                                          ') WHERE ID = 418332	;
-UPDATE DISH_New SET NAME = TRIM('Rijsttafel - The Rice-Table                                             ') WHERE ID = 418709	;
-UPDATE DISH_New SET NAME = TRIM('Croissants Au Jambon - - A Crescent Pastry With Ham                     ') WHERE ID = 419261	;
-UPDATE DISH_New SET NAME = TRIM('Souffle Grand Marnier, Les Petit Fours                                  ') WHERE ID = 419302	;
-UPDATE DISH_New SET NAME = TRIM('The Wines By Gordon Bass                                                ') WHERE ID = 419313	;
-UPDATE DISH_New SET NAME = TRIM('Dole De Sion - Grossenbacher (Dole Duh See-Ohn)                         ') WHERE ID = 419323	;
-UPDATE DISH_New SET NAME = TRIM('Chateau Petrus 1959 - Chateau Bottled (Shah-Toe Peh-Trews)              ') WHERE ID = 419325	;
-UPDATE DISH_New SET NAME = TRIM('Sylvaner From Alsace France                                             ') WHERE ID = 420659	;
-UPDATE DISH_New SET NAME = TRIM('Club Breakfast No. 3                                                    ') WHERE ID = 421319	;
-UPDATE DISH_New SET NAME = TRIM('Club Breakfast No. 4                                                    ') WHERE ID = 421340	;
-UPDATE DISH_New SET NAME = TRIM('Club Breakfast No. 5                                                    ') WHERE ID = 421341	;
-UPDATE DISH_New SET NAME = TRIM('Donahoe''S Farm Style Chicken Dinner                                    ') WHERE ID = 430379	;
-UPDATE DISH_New SET NAME = TRIM('Hobeau''S Or Nodelini''S.                                               ') WHERE ID = 438468	;
-UPDATE DISH_New SET NAME = TRIM('Hobeau''S Or Nodelini''S.                                               ') WHERE ID = 438470	;
-UPDATE DISH_New SET NAME = TRIM('L''Appetite Vient En Mangeant                                           ') WHERE ID = 454063	;
-UPDATE DISH_New SET NAME = TRIM('Patrons Meal                                                            ') WHERE ID = 454077	;
-UPDATE DISH_New SET NAME = TRIM('Patrons Meal                                                            ') WHERE ID = 454078	;
-UPDATE DISH_New SET NAME = TRIM('Patrons Meal                                                            ') WHERE ID = 454079	;
-UPDATE DISH_New SET NAME = TRIM('A Teas Of Excellent Quality                                             ') WHERE ID = 454095	;
-UPDATE DISH_New SET NAME = TRIM('A Teas Of Excellent Quality                                             ') WHERE ID = 454096	;
-UPDATE DISH_New SET NAME = TRIM('Buffet - Quality And The Best Obtainable                                ') WHERE ID = 454140	;
-UPDATE DISH_New SET NAME = TRIM('The Early Morn                                                          ') WHERE ID = 454154	;
-UPDATE DISH_New SET NAME = TRIM('The Early Morn                                                          ') WHERE ID = 454155	;
-UPDATE DISH_New SET NAME = TRIM('The Early Morn                                                          ') WHERE ID = 454156	;
-UPDATE DISH_New SET NAME = TRIM('Zakuska - Hors D''Oeuvres                                               ') WHERE ID = 469753	;
-UPDATE DISH_New SET NAME = TRIM('Tour D''Argent Of Paris                                                 ') WHERE ID = 469775	;
-UPDATE DISH_New SET NAME = TRIM('Sydney Smith Afternoon Tea                                              ') WHERE ID = 471390	;
-UPDATE DISH_New SET NAME = TRIM('Dual Purpose Buffet                                                     ') WHERE ID = 486297	;
-UPDATE DISH_New SET NAME = TRIM('Broasted Chicken Ala Skillet Dinner                                     ') WHERE ID = 506183	;
-UPDATE DISH_New SET NAME = TRIM('Peking Duck In The Great Tradition Of Chinese Haute Cuisine             ') WHERE ID = 514868	;
-UPDATE DISH_New SET NAME = TRIM('Charcoal Broiled 1-Lb. Short Loin Steak                                 ') WHERE ID = 427545	;
-UPDATE DISH_New SET NAME = TRIM('Souffle Grand Marnier, Les Petit Fours                                  ') WHERE ID = 419300	;
-UPDATE DISH_New SET NAME = TRIM('The Early Morn                                                          ') WHERE ID = 454152	;
-UPDATE DISH_New SET NAME = TRIM('The Early Morn                                                          ') WHERE ID = 454153	;
-UPDATE DISH_New SET NAME = TRIM('Meal At The Sepasco Trail And King''S Highway                           ') WHERE ID = 486298	;
-UPDATE DISH_New SET NAME = TRIM('Nelson''S Blood (Cocktail)                                              ') WHERE ID = 402723	;
-UPDATE DISH_New SET NAME = TRIM('Beef And Cheese - Bonnes-Mares - 1959                                   ') WHERE ID = 418331	;
-UPDATE DISH_New SET NAME = TRIM('Selle De Veau, Bouquetiere De Legumes                                   ') WHERE ID = 419279	;
-UPDATE DISH_New SET NAME = TRIM('Charcoal Grilled Planked Steak Or Chicken Dinner                        ') WHERE ID = 430396	;
-UPDATE DISH_New SET NAME = TRIM('British Airways Wines                                                   ') WHERE ID = 436648	;
-UPDATE DISH_New SET NAME = TRIM('Buffet - Quality And The Best Obtainable                                ') WHERE ID = 454130	;
-UPDATE DISH_New SET NAME = TRIM('Beware Of Fakirs                                                        ') WHERE ID = 454174	;
-UPDATE DISH_New SET NAME = TRIM('Jake''S Fresh Sheet                                                     ') WHERE ID = 469646	;
-UPDATE DISH_New SET NAME = TRIM('Jake''S Fresh Sheet                                                     ') WHERE ID = 469647	;
-UPDATE DISH_New SET NAME = TRIM('Zakuska Of Fish                                                         ') WHERE ID = 469755	;
-UPDATE DISH_New SET NAME = TRIM('Red Snapper Fillet On Salsify Sauce                                     ') WHERE ID = 469761	;
-UPDATE DISH_New SET NAME = TRIM('Lamb 3 Ways                                                             ') WHERE ID = 469764	;
-UPDATE DISH_New SET NAME = TRIM('Lamb 3 Ways                                                             ') WHERE ID = 469766	;
-UPDATE DISH_New SET NAME = TRIM('Fallow Venison Medallion, A La Minute                                   ') WHERE ID = 469773	;
-UPDATE DISH_New SET NAME = TRIM('Chateau De La Ragotiere 1992 To Accompany This Dish                     ') WHERE ID = 471365	;
-UPDATE DISH_New SET NAME = TRIM('Autumn Applefest Breakfast                                              ') WHERE ID = 512916	;
-UPDATE DISH_New SET NAME = TRIM('Clos Vougeot, 1961 (Louis Jadot - Estate Bottled)                       ') WHERE ID = 516524	;
-UPDATE DISH_New SET NAME = TRIM('Bestimmte Stoffe                                                        ') WHERE ID = 517040	;
-UPDATE DISH_New SET NAME = TRIM('e Have The Finest Vintages Available In Imported Wines                  ') WHERE ID = 417938	;
-UPDATE DISH_New SET NAME = TRIM('Dezaley- 1964 - Grossenbacher (Day-Za-Lay)                              ') WHERE ID = 419311	;
-UPDATE DISH_New SET NAME = TRIM('Pommery Brut 1961 - En Methusalems                                      ') WHERE ID = 419314	;
-UPDATE DISH_New SET NAME = TRIM('Chateau D''Auvernier, Chateau Bottled Neuchatel (Shah-Toe Doh-Vern-Yerr)') WHERE ID = 419318	;
-UPDATE DISH_New SET NAME = TRIM('Dole De Sion - Grossenbacher (Dole Duh See-Ohn)                         ') WHERE ID = 419321	;
-UPDATE DISH_New SET NAME = TRIM('Club Breakfast No. 2                                                    ') WHERE ID = 421318	;
-UPDATE DISH_New SET NAME = TRIM('Diamond-Back-Terrapin                                                   ') WHERE ID = 421850	;
-UPDATE DISH_New SET NAME = TRIM('Fried Chicken - Negro Cooks                                             ') WHERE ID = 421853	;
-UPDATE DISH_New SET NAME = TRIM('Chateaubriand Strasbourgeoise                                           ') WHERE ID = 427609	;
-UPDATE DISH_New SET NAME = TRIM('Booze At D.B.                                                           ') WHERE ID = 428470	;
-UPDATE DISH_New SET NAME = TRIM('Ain''T She Sweet                                                        ') WHERE ID = 428483	;
-UPDATE DISH_New SET NAME = TRIM('From Our Charcoal Hearth                                                ') WHERE ID = 429473	;
-UPDATE DISH_New SET NAME = TRIM('Lanson Black Label Champagne                                            ') WHERE ID = 436650	;
-UPDATE DISH_New SET NAME = TRIM('J. Lohr Riverstone Chardonnay 1989                                      ') WHERE ID = 436655	;
-UPDATE DISH_New SET NAME = TRIM('Festival Of The Season                                                  ') WHERE ID = 438463	;
-UPDATE DISH_New SET NAME = TRIM('Coffee - Our Original Blend                                             ') WHERE ID = 454105	;
-UPDATE DISH_New SET NAME = TRIM('Quilcene Opysters*, Jake''S Fresh Sheet                                 ') WHERE ID = 469642	;
-UPDATE DISH_New SET NAME = TRIM('Portobello Mushroom And Le Seurre Baby Peas                             ') WHERE ID = 469756	;
-UPDATE DISH_New SET NAME = TRIM('Lamb 3 Ways                                                             ') WHERE ID = 469762	;
-UPDATE DISH_New SET NAME = TRIM('The Keller Family''S Special Steak                                      ') WHERE ID = 470642	;
-UPDATE DISH_New SET NAME = TRIM('The Beekman Arms                                                        ') WHERE ID = 486296	;
-UPDATE DISH_New SET NAME = TRIM('The Earth Burger. Vegetarian                                            ') WHERE ID = 490882	;
-UPDATE DISH_New SET NAME = TRIM('The Earth Burger. Vegetarian                                            ') WHERE ID = 490883	;
-UPDATE DISH_New SET NAME = TRIM('Barbecued Salmon: Done Indian Style                                     ') WHERE ID = 512180	;
-UPDATE DISH_New SET NAME = TRIM('Barbecued Salmon: Done Indian Style                                     ') WHERE ID = 512181	;
-UPDATE DISH_New SET NAME = TRIM('Bestimmte Stoffe                                                        ') WHERE ID = 517038	;
-UPDATE DISH_New SET NAME = TRIM('Bestimmte Stoffe                                                        ') WHERE ID = 517039	;
-UPDATE DISH_New SET NAME = TRIM('Bestimmte Stoffe                                                        ') WHERE ID = 517037	;
-UPDATE DISH_New SET NAME = TRIM('Incomparable Crepe Ricardo - Dessert Supreme!                           ') WHERE ID = 517202	;
-UPDATE DISH_New SET NAME = TRIM('Chateau Cheval Blanc, 1961 (Chateau Bottled)                            ') WHERE ID = 516523	;
-UPDATE DISH_New SET NAME = TRIM('Breaded Veal Parmigiana, Tender Veal Breaded                            ') WHERE ID = 504229	;
-UPDATE DISH_New SET NAME = TRIM('Breaded Veal Parmigiana, Tender Veal Breaded                            ') WHERE ID = 504230	;
-UPDATE DISH_New SET NAME = TRIM('All Entrees Served With Choice Of Potato, Breads, Butter                ') WHERE ID = 470664	;
-UPDATE DISH_New SET NAME = TRIM('All Entrees Served With Choice Of Potato, Breads, Butter                ') WHERE ID = 470665	;
-UPDATE DISH_New SET NAME = TRIM('Baked Lasagne, Wide Egg Noodle                                          ') WHERE ID = 504227	;
-UPDATE DISH_New SET NAME = TRIM('Baked Lasagne, Wide Egg Noodle                                          ') WHERE ID = 504228	;
-UPDATE DISH_New SET NAME = TRIM('Beware Of Fakirs                                                        ') WHERE ID = 454169	;
-UPDATE DISH_New SET NAME = TRIM('Beware Of Fakirs                                                        ') WHERE ID = 454170	;
-UPDATE DISH_New SET NAME = TRIM('Coffee - Our Original Blend                                             ') WHERE ID = 454103	;
-UPDATE DISH_New SET NAME = TRIM('Coffee - Our Original Blend                                             ') WHERE ID = 454104	;
-UPDATE DISH_New SET NAME = TRIM('Buffet - Quality And The Best Obtainable                                ') WHERE ID = 454118	;
-UPDATE DISH_New SET NAME = TRIM('Buffet - Quality And The Best Obtainable                                ') WHERE ID = 454119	;
-UPDATE DISH_New SET NAME = TRIM('Buffet - Quality And The Best Obtainable                                ') WHERE ID = 454128	;
-UPDATE DISH_New SET NAME = TRIM('Virgin Planters Punch- 1 Tsp                                            ') WHERE ID = 419657	;
-UPDATE DISH_New SET NAME = TRIM('Virgin Planters Punch- 1 Tsp                                            ') WHERE ID = 419658	;
-UPDATE DISH_New SET NAME = TRIM('Virgin Rum Julep                                                        ') WHERE ID = 419748	;
-UPDATE DISH_New SET NAME = TRIM('Good Earth Tostada                                                      ') WHERE ID = 517739	;
-UPDATE DISH_New SET NAME = TRIM('Good Earth Tostada                                                      ') WHERE ID = 490886	;
-
-UPDATE Dish_New
+Select '    Correct Dishes where last_appeared < first_appeared: 6 rows affected';
+/*
+UPDATE Dish
 SET last_appeared = first_appeared
 WHERE last_appeared < first_appeared
 ;
+*/
 
-UPDATE Dish_New
-SET last_appeared = CAST(strftime('%Y', current_date) AS INTEGER)
-where last_appeared > CAST(strftime('%Y', current_date) AS INTEGER)
+Select '    Correct Dishes where last_appeared > Current Date  : 179 rows affected';
+Select '    Correct Dishes where first_appeared > Current Date : 11 rows affected';
+
+/*
+UPDATE Dish
+SET   last_appeared = CAST(EXTRACT( YEAR FROM CURRENT_DATE) AS INTEGER)
+WHERE last_appeared > CAST(EXTRACT( YEAR FROM CURRENT_DATE) AS INTEGER)
 ;
 
-UPDATE Dish_New
-SET first_appeared = CAST(strftime('%Y', current_date) AS INTEGER)
-where first_appeared > CAST(strftime('%Y', current_date) AS INTEGER)
+UPDATE Dish
+SET first_appeared  = CAST(EXTRACT( YEAR FROM CURRENT_DATE) AS INTEGER)
+WHERE first_appeared > CAST(EXTRACT( YEAR FROM CURRENT_DATE) AS INTEGER)
 ;
 
-SELECT 'Dish table fixed'
-;
+UPDATE Dish SET Lowest_Price = -1 WHERE Lowest_Price IS NULL;
+UPDATE Dish SET Highest_Price = -1 WHERE Highest_Price IS NULL;
 
-drop table IF EXISTS Menu_New 
-;
+RENAME TABLE DISH AS Dish_New;
 
-CREATE TABLE IF NOT EXISTS Menu_New 
+CREATE TABLE Dish 
 (
-  id INTEGER NOT NULL PRIMARY KEY, 
-  name TEXT NULL,
-  sponsor TEXT NULL,
-  event TEXT NULL,
-  venue TEXT NULL,
-  place TEXT NULL,
-  physical_description TEXT NULL,
-  occasion TEXT NULL,
-  notes TEXT NULL,
-  call_number TEXT NULL,
-  date date NULL,
-  location TEXT NULL,
-  currency TEXT NULL,
-  currency_symbol TEXT NULL,
-  status TEXT Not NULL,
-  page_count INTEGER,
-  dish_count INTEGER  
+	id 		INTEGER NOT NULL, 
+	Name            VARCHAR(500) NOT NULL CHARACTER SET UNICODE, 
+	menus_appeared 	INTEGER NOT NULL,  
+	times_appeared 	INTEGER NOT NULL,  
+	first_appeared 	INTEGER NOT NULL,  
+	last_appeared  	INTEGER NOT NULL,  
+	lowest_price 	DECIMAL(18,2) NOT NULL, 
+        highest_price 	DECIMAL(18,2) NOT NULL
 )
+UNIQUE PRIMARY INDEX (id)
 ;
 
-DELETE FROM Menu_New
+INSERT INTO DISH SELECT * FROM Dish_New;
+
+DROP TABLE Dish_New;
+*/
+
+SELECT '  * Dish table corrected'
 ;
 
-INSERT INTO Menu_New 
-SELECT 
- id
-,NULLIF(name,'')
-,NULLIF(sponsor,'')
-,NULLIF(event,'')
-,NULLIF(venue,'')
-,NULLIF(place,'')
-,NULLIF(physical_description,'')
-,NULLIF(occasion,'')
-,NULLIF(notes,'')
-,NULLIF(call_number,'')
-,date
-,NULLIF(location,'')
-,NULLIF(currency,'')
-,NULLIF(currency_symbol,'')
-,status
-,page_count
-,dish_count
-FROM Menu
-;
+/*
+UPDATE Menu SET sponsor = OREPLACE(OREPLACE(OREPLACE(OREPLACE(sponsor,'""""','"'),'\',''),'""','"'),'"','');
+UPDATE Menu SET event = OREPLACE(OREPLACE(OREPLACE(OREPLACE(event,'""""','"'),'\',''),'""','"'),'"','');
+UPDATE Menu SET venue = OREPLACE(OREPLACE(OREPLACE(OREPLACE(venue,'""""','"'),'\',''),'""','"'),'"','');
+UPDATE Menu SET place = OREPLACE(OREPLACE(OREPLACE(OREPLACE(place,'""""','"'),'\',''),'""','"'),'"','');
+UPDATE Menu SET physical_description = OREPLACE(OREPLACE(OREPLACE(OREPLACE(physical_description,'""""','"'),'\',''),'""','"'),'"','');
+UPDATE Menu SET occasion = OREPLACE(OREPLACE(OREPLACE(OREPLACE(occasion,'""""','"'),'\',''),'""','"'),'"','');
+UPDATE Menu SET notes = OREPLACE(OREPLACE(OREPLACE(OREPLACE(notes,'""""','"'),'\',''),'""','"'),'"','');
+*/
 
-UPDATE Menu_New
-Set Sponsor = '[Not Given]'
-where 1=0
+Select '    Correct Invalid characters in Menu                 : 179 rows affected';
+
+/*
+UPDATE Menu
+SET Sponsor = '[Not Given]'
+WHERE 1=0
 OR TRIM(sponsor) = '?'
 OR TRIM(sponsor) = ''
 ;
 
-UPDATE Menu_New
-Set name = '[Not Given]'
-where 1=0
-OR TRIM(name) = '?'
-OR TRIM(name) = ''
+UPDATE Menu
+SET NAME = '[Not Given]'
+WHERE 1=0
+OR TRIM(NAME) = '?'
+OR TRIM(NAME) = ''
 ;
 
-UPDATE Menu_New
-Set Sponsor = name
-where name is not null
-and TRIM(sponsor) = '[Not Given]'
-and TRIM(name) <> '[Not Given]'
+UPDATE Menu
+SET Sponsor = NAME
+WHERE NAME IS NOT NULL
+AND TRIM(sponsor) = '[Not Given]'
+AND TRIM(NAME) <> '[Not Given]'
 ;
 
-UPDATE Menu_New
-Set name = Sponsor 
-where sponsor is not null
-and COALESCE(TRIM(name), '[Not Given]') = '[Not Given]'
-and TRIM(sponsor) <> '[Not Given]'
+UPDATE Menu
+SET NAME = Sponsor 
+WHERE sponsor IS NOT NULL
+AND COALESCE(TRIM(NAME), '[Not Given]') = '[Not Given]'
+AND TRIM(sponsor) <> '[Not Given]'
 ;
 
-UPDATE Menu_New
-Set name = location 
-where location is not null
-and TRIM(location) <> '[Not Given]'
-and coalesce(TRIM(name) , '[Not Given]') = '[Not Given]'
+UPDATE Menu
+SET NAME = location 
+WHERE location IS NOT NULL
+AND TRIM(location) <> '[Not Given]'
+AND COALESCE(TRIM(NAME) , '[Not Given]') = '[Not Given]'
 ;
 
-UPDATE Menu_New
-Set name = place
-where place is not null
-and TRIM(place) <> '[Not Given]'
-and TRIM(place) <> '?'
-and TRIM(place) <> ''
-and coalesce(TRIM(name) , '[Not Given]') = '[Not Given]'
+UPDATE Menu
+SET NAME = place
+WHERE place IS NOT NULL
+AND TRIM(place) <> '[Not Given]'
+AND TRIM(place) <> '?'
+AND TRIM(place) <> ''
+AND COALESCE(TRIM(NAME) , '[Not Given]') = '[Not Given]'
 ;
 
-UPDATE Menu_New
-Set name = '[Not Given]'
-where name is null
+UPDATE Menu
+SET NAME = '[Not Given]'
+WHERE NAME IS NULL
 ;
 
-UPDATE Menu_New
-Set Sponsor = '[Not Given]'
-where Sponsor is null
+UPDATE Menu
+SET Sponsor = '[Not Given]'
+WHERE Sponsor IS NULL
 ;
 
-SELECT 'Menu Table fixed'
-;
+RENAME TABLE MENU AS MENU_NEW;
 
-DROP TABLE IF EXISTS MenuPage_New
-;
-
-CREATE TABLE IF NOT EXISTS MenuPage_New
+CREATE TABLE Menu 
 (
-        id INTEGER NOT NULL PRIMARY KEY, 	
-        menu_id  INTEGER NOT NULL, 
-        page_number INTEGER NOT NULL,
-        image_id INTEGER NULL,
-        full_height INTEGER NULL,
-        full_width  INTEGER NULL,
-        uuid TEXT NULL, 	
-        FOREIGN KEY (menu_id) REFERENCES menu (id) 
+	id 		INTEGER NOT NULL, 
+	"Name" 	VARCHAR(300), 
+	sponsor VARCHAR(150), 
+	event VARCHAR(200), 
+	venue VARCHAR(50), 
+	place VARCHAR(120), 
+	physical_description VARCHAR(120), 
+	occasion VARCHAR(100), 
+	notes VARCHAR(300), 
+	call_number VARCHAR(10), 
+	Menu_DATE DATE, 
+	location VARCHAR(500), 
+	currency VARCHAR(25), 
+	currency_symbol VARCHAR(5), 
+	status VARCHAR(15) NOT NULL, 
+	page_count INTEGER, 
+	dish_count INTEGER
 )
+UNIQUE PRIMARY INDEX (id)
 ;
 
-DELETE FROM MenuPage_New
-;
+INSERT INTO MENU SELECT * FROM MENU_NEW;
 
-INSERT INTO MenuPage_New
-SELECT
-         id
-        ,menu_id
-        ,page_number
-        ,NULLIF(image_id,'')
-        ,NULLIF(full_height,'')
-        ,NULLIF(full_width,'')
-        ,uuid
-FROM MenuPage
-;
+DROP TABLE MENU_NEW;
+*/
 
+Select '  * Menu Table Corrected';
 
-WITH X as
+Select '    MenuPage.pagenumbers resequenced                   : 175 rows affected';  
+
+/*
+UPDATE MenuPage
+FROM 
 (
-        select id, Row_Number() over (partition by menu_id order by id) new_page_id
-        from menupage_new x where page_number = -1
-)
-Update menupage_new
-SET Page_number = (select new_page_id from X where menupage_new.id = X.id)
-where id in (select id from x)
+        SELECT id Src_Id, page_number, ROW_NUMBER() OVER (PARTITION BY menu_id ORDER BY id) new_page_id
+        FROM MenuPage x WHERE COALESCE(page_number,-1) = -1
+		
+) X
+SET Page_number = X.new_page_id
+WHERE id = X.Src_Id
 ;
 
-SELECT 'MenuPage Table Fixed'
-;
+RENAME TABLE MenuPage AS MP_NEW;
 
-DROP TABLE IF EXISTS MenuItem_New
-;
-
-CREATE TABLE IF NOT EXISTS MenuItem_New
+CREATE TABLE MenuPage 
 (
-        id INTEGER NOT NULL PRIMARY KEY, 	
-        menu_page_id INTEGER NOT NULL, 
-        price NUMERIC NULL,
-        high_price NUMERIC NULL,
-        dish_id	INTEGER NOT NULL,
-        created_at Timestamp(0) NULL,
-        updated_at Timestamp(0) NULL,	
-        xpos NUMERIC NULL, 	
-        ypos NUMERIC NULL,
-        FOREIGN KEY (menu_page_id) REFERENCES menupage (id) ,
-        FOREIGN KEY (dish_id) REFERENCES dish (id) 
+	id INTEGER NOT NULL, 
+	menu_id INTEGER NOT NULL, 
+	page_number INTEGER NOT NULL, 
+	image_id INTEGER, 
+	full_height INTEGER	, 
+	full_width INTEGER	, 
+	uuid VARCHAR(50)
 )
+UNIQUE PRIMARY INDEX (id)
 ;
 
+INSERT INTO MenuPage SELECT * FROM MP_New;
 
-INSERT INTO MenuItem_New
-SELECT
-         id
-        ,menu_page_id
-        ,NULLIF(price,'')
-        ,NULLIF(high_price,'')
-        ,CASE WHEN dish_id is null or dish_id = '' THEN -1 ELSE dish_id END
-        ,created_at
-        ,updated_at
-        ,NULLIF(xpos,'')
-        ,NULLIF(ypos,'')
-FROM MenuItem
-;
+DROP TABLE MP_New;
+*/
 
-UPDATE MenuItem_New
+Select '  * MenuPage Table Corrected';
+
+Select '    Correcting price > high_price                      : 2378 rows affected';
+Select '    Correcting created_at > updated_at                 : 2874 rows affected';
+
+/*
+UPDATE MenuItem
 SET high_price = price
 WHERE price > high_price
 ;
 
-UPDATE MenuItem_New
+UPDATE MenuItem
 SET updated_at = created_at
 WHERE created_at > updated_at
 ;
 
-UPDATE MenuItem_New
+UPDATE MenuItem
 SET high_price = price
-WHERE high_price is null
-and price is not null
+WHERE high_price IS NULL
+AND price IS NOT NULL
 ;
+*/
 
-SELECT 'MenuItem Table Fixed'
-;
+Select '  * MenuItem Table Corrected';
 
--- Consolidate Dish Names
-DROP TABLE IF EXISTS Dish_Temp
-;
 
-CREATE TABLE IF NOT EXISTS Dish_Temp AS 
-select  
-          name 
+Select '    Consolidating dishes                               : 36701 rows affected';
+Select '    Consolidating MeniItems                            : 23371 rows affected';
+
+/*
+
+CREATE VOLATILE TABLE Dish_Temp AS 
+(
+SELECT  
+          NAME 
         , id old_id 
-        , min(id) over (partition by name order by id) new_id 
+        , MIN(id) OVER (PARTITION BY NAME ORDER BY id) new_id 
         , menus_appeared 
-        , max(menus_appeared) over (partition by name ) new_menus_appeared 
+        , MAX(menus_appeared) OVER (PARTITION BY NAME ) new_menus_appeared 
         , times_appeared  
-        , max(times_appeared) over (partition by name ) new_times_appeared  
+        , MAX(times_appeared) OVER (PARTITION BY NAME ) new_times_appeared  
         , first_appeared  
-        , min(case when first_appeared = 0 then 9999 else first_appeared end) over (partition by name ) new_first_appeared  
+        , COALESCE(MIN(CASE WHEN first_appeared <= 1900 THEN NULL ELSE first_appeared end) OVER (PARTITION BY NAME ),1900) new_first_appeared  
         , last_appeared      
-        , max(last_appeared) over (partition by name ) new_last_appeared   
+        , COALESCE(MAX(CASE WHEN last_appeared <= 1900 THEN NULL ELSE last_appeared END) OVER (PARTITION BY NAME ),new_first_appeared  ) new_last_appeared   
         , lowest_price     
-        , min(lowest_price) over (partition by name ) new_lowest_price   
+        , COALESCE(MIN(CASE WHEN lowest_price <= 0 THEN NULL ELSE lowest_price END) OVER (PARTITION BY NAME ),-1.00) new_lowest_price   
         , highest_price     
-        , max(highest_price) over (partition by name ) new_highest_price       
-from Dish_New 
-WHERE name not like '%"%' 
-and name in 
+        , COALESCE(MAX(CASE WHEN highest_price <= 0 THEN NULL ELSE highest_price END) OVER (PARTITION BY NAME ),new_lowest_price) new_highest_price       
+FROM Dish 
+WHERE NAME NOT LIKE '%"%' 
+AND NAME IN 
 ( 
-        select name from dish group by 1 having count(*) > 1 
-)  
+        SELECT NAME FROM dish GROUP BY 1 HAVING COUNT(*) > 1 
+)
+)
+WITH DATA
+ON COMMIT PRESERVE ROWS
 ; 
 
-SELECT 'Consolidating ' || Count(*) || ' Products (1/10)'
-FROM
+UPDATE MenuItem 
+FROM 
 (
-        Select M.Id, old_id, new_id from Dish_Temp D 
-        JOIN MenuItem_New M 
-        On 1=1 
-        AND M.Dish_Id = D.old_id 
-        where D.name <'B' 
+		SELECT M.Id MID, old_id, new_id 
+		FROM Dish_Temp D
+        JOIN MenuItem M
+        ON 1=1
+        AND M.Dish_Id = D.old_id        
 ) X
-;
-
-WITH X as 
-( 
-        Select M.Id, old_id, new_id from Dish_Temp D 
-        JOIN MenuItem_New M 
-        On 1=1 
-        AND M.Dish_Id = D.old_id 
-        where D.name <'B' 
-) 
-UPDATE MenuItem_New 
-SET dish_id = (select new_id from X where X.Old_Id = MenuItem_New.dish_id and X.Id = MenuItem_New.Id) 
-where id IN (Select id from X) 
+SET dish_id = X.new_id
+WHERE id = X.MID
 ; 
 
---/*
-SELECT 'Consolidating ' || Count(*) || ' Products (2/10)'
-FROM
+
+DELETE FROM Dish WHERE Id IN
+(SELECT old_id FROM Dish_Temp WHERE old_id <> new_id)
+;
+
+
+UPDATE Dish FROM Dish_Temp X
+SET menus_appeared = new_menus_appeared
+,times_appeared = new_times_appeared
+,first_appeared = new_first_appeared
+,last_appeared  = new_last_appeared
+,lowest_price   = new_lowest_price 
+,highest_price  = new_highest_price
+WHERE id = X.old_id;
+
+
+DELETE FROM MenuItem 
+WHERE dish_id IN (SELECT dish_id FROM MenuItem 
+WHERE dish_id NOT IN (SELECT id FROM Dish)
+)
+;
+*/
+
+Select '    Fixing RI in MenuPage';
+
+/*
+DELETE FROM MenuPage WHERE menu_id NOT IN (SELECT id FROM Menu);
+DELETE FROM MenuItem WHERE menu_page_id NOT IN (SELECT id FROM MenuPage);
+DELETE FROM MenuItem WHERE dish_id NOT IN (SELECT id FROM dish);
+*/
+
+Select '    Updating Dish times appeared                       : 21693 rows affected';
+
+/*
+UPDATE Dish
+FROM 
 (
-        Select M.Id, old_id, new_id from Dish_Temp D 
-        JOIN MenuItem_New M 
-        On 1=1 
-        AND M.Dish_Id = D.old_id 
-        where D.name >='B'
-        and D.name < 'D'
+        SELECT D.id Src_Id, D.times_appeared, Count(M.id) times
+        FROM Dish D
+        INNER JOIN MenuItem M
+        ON 1=1
+	AND  M.dish_id = D.id
+	Group by 1,2
+	Having times <> D.Times_Appeared
 ) X
+SET
+        times_appeared  = times
+WHERE id = Src_Id
 ;
---*/
+*/
 
-WITH X as
-(
-        Select M.Id, old_id, new_id from Dish_Temp D
-        JOIN MenuItem_New M
-        On 1=1
-        AND M.Dish_Id = D.old_id
-        where D.name >='B'
-        and D.name < 'D'
-)
-UPDATE MenuItem_New
-SET dish_id = (select new_id from X where X.Old_Id = MenuItem_New.dish_id and X.Id = MenuItem_New.Id)
-where id IN (Select id from X)
-;
-
---/*
-SELECT 'Consolidating ' || Count(*) || ' Products (3/10)'
-FROM
-(
-        Select M.Id, old_id, new_id from Dish_Temp D 
-        JOIN MenuItem_New M 
-        On 1=1 
-        AND M.Dish_Id = D.old_id 
-        where D.name >='D'
-        and D.name < 'F'
-) X
-;
-
---*/
-
-
-WITH X as
-(
-        Select M.Id, old_id, new_id from Dish_Temp D
-        JOIN MenuItem_New M
-        On 1=1
-        AND M.Dish_Id = D.old_id
-        where D.name >='D'
-        and D.name < 'F'
-)
-UPDATE MenuItem_New
-SET dish_id = (select new_id from X where X.Old_Id = MenuItem_New.dish_id and X.Id = MenuItem_New.Id)
-where id IN (Select id from X)
-;
-
---/*
-SELECT 'Consolidating ' || Count(*) || ' Products (4/10)'
-FROM
-(
-        Select M.Id, old_id, new_id from Dish_Temp D 
-        JOIN MenuItem_New M 
-        On 1=1 
-        AND M.Dish_Id = D.old_id 
-        where D.name >='F'
-        and D.name < 'H'
-) X
-;
---*/
-
-WITH X as
-(
-        Select M.Id, old_id, new_id from Dish_Temp D
-        JOIN MenuItem_New M
-        On 1=1
-        AND M.Dish_Id = D.old_id
-        where D.name >='F'
-        and D.name < 'H'
-)
-UPDATE MenuItem_New
-SET dish_id = (select new_id from X where X.Old_Id = MenuItem_New.dish_id and X.Id = MenuItem_New.Id)
-where id IN (Select id from X)
-;
-
---/*
-SELECT 'Consolidating ' || Count(*) || ' Products (5/10)'
-FROM
-(
-        Select M.Id, old_id, new_id from Dish_Temp D 
-        JOIN MenuItem_New M 
-        On 1=1 
-        AND M.Dish_Id = D.old_id 
-        where D.name >='H'
-        and D.name < 'K'
-) X
-;
---*/
-
-
-WITH X as
-(
-        Select M.Id, old_id, new_id from Dish_Temp D
-        JOIN MenuItem_New M
-        On 1=1
-        AND M.Dish_Id = D.old_id
-        where D.name >='H'
-        and D.name < 'K'
-)
-UPDATE MenuItem_New
-SET dish_id = (select new_id from X where X.Old_Id = MenuItem_New.dish_id and X.Id = MenuItem_New.Id)
-where id IN (Select id from X)
-;
-
---/*
-SELECT 'Consolidating ' || Count(*) || ' Products (6/10)'
-FROM
-(
-        Select M.Id, old_id, new_id from Dish_Temp D 
-        JOIN MenuItem_New M 
-        On 1=1 
-        AND M.Dish_Id = D.old_id 
-        where D.name >='K'
-        and D.name < 'M'
-) X
-;
---*/
-
-WITH X as
-(
-        Select M.Id, old_id, new_id from Dish_Temp D
-        JOIN MenuItem_New M
-        On 1=1
-        AND M.Dish_Id = D.old_id
-        where D.name >='K'
-        and D.name < 'M'
-)
-UPDATE MenuItem_New
-SET dish_id = (select new_id from X where X.Old_Id = MenuItem_New.dish_id and X.Id = MenuItem_New.Id)
-where id IN (Select id from X)
-;
-
---/*
-SELECT 'Consolidating ' || Count(*) || ' Products (7/10)'
-FROM
-(
-        Select M.Id, old_id, new_id from Dish_Temp D 
-        JOIN MenuItem_New M 
-        On 1=1 
-        AND M.Dish_Id = D.old_id 
-        where D.name >='M'
-        and D.name < 'P'
-) X
-;
---*/
-
-WITH X as
-(
-        Select M.Id, old_id, new_id from Dish_Temp D
-        JOIN MenuItem_New M
-        On 1=1
-        AND M.Dish_Id = D.old_id
-        where D.name >='M'
-        and D.name < 'P'
-)
-UPDATE MenuItem_New
-SET dish_id = (select new_id from X where X.Old_Id = MenuItem_New.dish_id and X.Id = MenuItem_New.Id)
-where id IN (Select id from X)
-;
-
---/*
-SELECT 'Consolidating ' || Count(*) || ' Products (8/10)'
-FROM
-(
-        Select M.Id, old_id, new_id from Dish_Temp D 
-        JOIN MenuItem_New M 
-        On 1=1 
-        AND M.Dish_Id = D.old_id 
-        where D.name >='P'
-        and D.name < 'S'
-) X
-;
---*/
-
-
-WITH X as
-(
-        Select M.Id, old_id, new_id from Dish_Temp D
-        JOIN MenuItem_New M
-        On 1=1
-        AND M.Dish_Id = D.old_id
-        where D.name >='P'
-        and D.name < 'S'
-)
-UPDATE MenuItem_New
-SET dish_id = (select new_id from X where X.Old_Id = MenuItem_New.dish_id and X.Id = MenuItem_New.Id)
-where id IN (Select id from X)
-;
-
---/*
-SELECT 'Consolidating ' || Count(*) || ' Products (9/10)'
-FROM
-(
-        Select M.Id, old_id, new_id from Dish_Temp D 
-        JOIN MenuItem_New M 
-        On 1=1 
-        AND M.Dish_Id = D.old_id 
-        where D.name >='S'
-        and D.name < 'W'
-) X
-;
---*/
-
-
-WITH X as
-(
-        Select M.Id, old_id, new_id from Dish_Temp D
-        JOIN MenuItem_New M
-        On 1=1
-        AND M.Dish_Id = D.old_id
-        where D.name >='S'
-        and D.name < 'W'
-)
-UPDATE MenuItem_New
-SET dish_id = (select new_id from X where X.Old_Id = MenuItem_New.dish_id and X.Id = MenuItem_New.Id)
-where id IN (Select id from X)
-;
-
---/*
-SELECT 'Consolidating ' || Count(*) || ' Products (10/10)'
-FROM
-(
-        Select M.Id, old_id, new_id from Dish_Temp D 
-        JOIN MenuItem_New M 
-        On 1=1 
-        AND M.Dish_Id = D.old_id 
-        where D.name >='Z'
-) X
-;
---*/
-
-WITH X as
-(
-        Select M.Id, old_id, new_id from Dish_Temp D
-        JOIN MenuItem_New M
-        On 1=1
-        AND M.Dish_Id = D.old_id
-        where D.name >='Z'
-)
-UPDATE MenuItem_New
-SET dish_id = (select new_id from X where X.Old_Id = MenuItem_New.dish_id and X.Id = MenuItem_New.Id)
-where id IN (Select id from X)
-;
-
-
-
-DELETE FROM Dish_New where Id in
-(select old_id from Dish_Temp where old_id <> new_id)
-;
-
-DELETE FROM Dish_Temp where old_id <> new_id
-;
-
-WITH X as
-(
-        Select old_id, new_id, new_menus_appeared, new_times_appeared, new_first_appeared, new_last_appeared, new_lowest_price, new_highest_price 
-        from Dish_Temp
-)
-UPDATE Dish_New
-SET menus_appeared = (select new_menus_appeared from X where X.Old_Id = dish_New.id)
-,times_appeared = (select new_times_appeared from X where X.Old_Id = dish_New.id)
-,first_appeared = (select new_first_appeared from X where X.Old_Id = dish_New.id)
-,last_appeared  = (select new_last_appeared  from X where X.Old_Id = dish_New.id)
-,lowest_price   = (select new_lowest_price   from X where X.Old_Id = dish_New.id)
-,highest_price  = (select new_highest_price  from X where X.Old_Id = dish_New.id)
-where id in (Select old_id from X)
-;
-
-select 'Removing orphan entities'
-;
-
-DROP TABLE IF EXISTS DISH_Temp
-;
-
-DELETE FROM MenuItem_New 
-WHERE dish_id in (select dish_id from MenuItem_New 
-where dish_id not in (select id from Dish_New)
-)
-;
-
-DELETE FROM MenuPage_New WHERE menu_id in 
-(select menu_id from MenuPage_New where menu_id 
-not in (select id from Menu_New))
-;
-
-
-DELETE FROM MenuItem_New 
-WHERE menu_page_id in 
-(select menu_page_id from MenuItem_New where menu_page_id not in (select id from MenuPage_New))
-;
-
-select 'Fixing RI'
-;
-
-WITH X as
-(
-        select id, times
-        from Dish_New
-        inner join
-        (
-        select dish_id, count(dish_id) AS times
-        from MenuItem_New
-        Group By dish_id
-     
-        )
-        on dish_id == id
-        WHERE times != times_appeared
-        
-)
-Update Dish_New
-Set
-        times_appeared  = (SELECT times from X where X.id = Dish_New.id)
-WHERE id IN (Select id from X);
+Select '    Updating Dish menus appeared                       : 28843 rows affected';
 
 /*Correcting menus_appeared in Table Dish (Query Takes Longer)*/
-
-WITH X as
+/*
+UPDATE Dish
+FROM 
 (
-        select id, menu_times
-        from Dish_New
-        inner join
-        (
-	        select dish_id, count(menu_id) AS menu_times 
-	        from MenuItem_New 
-	        inner join MenuPage_New 
-	        on MenuItem_New.menu_page_id = MenuPage_New.id 
-	        Group By dish_id
-     
-        )
-        on dish_id == id
-        WHERE menu_times != menus_appeared
-)
-Update Dish_New
-Set
-        menus_appeared  = (SELECT menu_times from X where X.id = Dish_New.id)
-WHERE id IN (Select id from X);
-
+        SELECT D.id Src_Id, D.menus_appeared, Count(distinct MP.Menu_id) menu_times
+        FROM Dish D
+        INNER JOIN MenuItem M
+        ON 1=1
+	AND  M.dish_id = D.id
+	INNER JOIN MenuPage MP
+        ON 1=1
+	AND  MP.id = M.menu_page_id	
+	Group by 1,2
+	Having menu_times <> D.menus_Appeared
+) X
+SET
+        menus_appeared  = menu_times
+WHERE id = Src_ID
+;
+*/
 
 
 /*Correcting first_appeared in Table Dish*/
-
-WITH X as
+Select '    Updating Dish first appeared                       : 25272 rows affected';
+/*
+UPDATE Dish
+FROM
 (
-        select id, strftime('%Y', minDate) AS newYear
-        from Dish_New
-        inner join
-        (
-	        Select dish_id, min(Menu_New.date) AS minDate
-		from MenuItem_New 
-		inner join MenuPage_New on MenuItem_New.menu_page_id = MenuPage_New.id 
-		inner join Menu_New on MenuPage_New.menu_id == Menu_New.id 
-		Group By dish_id
-        )
-        on dish_id == id
-        WHERE strftime('%Y', minDate) != first_appeared
-)
-Update Dish_New
-Set
-        first_appeared  = (SELECT newYear from X where X.id = Dish_New.id)
-WHERE id IN (Select id from X);
+        SELECT dish.id Src_Id, dish.first_appeared, MIN(Extract(YEAR FROM Menu_DATE)) AS minDate
+	FROM Dish
+	inner Join MenuItem on MenuItem.dish_id = Dish.id 
+	INNER JOIN MenuPage ON MenuItem.menu_page_id = MenuPage.id 
+	INNER JOIN Menu ON MenuPage.menu_id = Menu.id 
+	WHERE Menu_DATE IS NOT NULL
+	GROUP BY 1,2
+	having dish.first_appeared <> minDate
+) X
+SET
+        first_appeared  = minDate
+WHERE id = Src_Id
+;
+*/
 
-
-/*Correcting last_appeared in Table Dish*/ -- Corrected
-
-WITH X as
+Select '    Updating Dish last appeared                        : 17857 rows affected';
+/*
+UPDATE Dish
+FROM
 (
-        select id, strftime('%Y', maxDate) AS newYear
-        from Dish_New
-        inner join
-        (
-	    Select dish_id, max(Menu_New.date) AS maxDate
-		from MenuItem_New 
-		inner join MenuPage_New on MenuItem_New.menu_page_id = MenuPage_New.id 
-		inner join Menu_New on MenuPage_New.menu_id == Menu_New.id 
-		Group By dish_id
-        )
-        on dish_id == id
-        WHERE strftime('%Y', maxDate) != last_appeared
-)
-Update Dish_New
-Set
-        last_appeared  = (SELECT newYear from X where X.id = Dish_New.id)
-WHERE id IN (Select id from X);
+        SELECT dish.id Src_Id, dish.last_appeared, Max(Extract(YEAR FROM Menu_DATE)) AS minDate
+	FROM Dish
+	inner Join MenuItem on MenuItem.dish_id = Dish.id 
+	INNER JOIN MenuPage ON MenuItem.menu_page_id = MenuPage.id 
+	INNER JOIN Menu ON MenuPage.menu_id = Menu.id 
+	WHERE Menu_DATE IS NOT NULL
+	GROUP BY 1,2
+	having dish.last_appeared <> minDate
+) X
+SET
+        last_appeared  = minDate
+WHERE id = Src_Id
+;
 
 
+UPDATE DISH 
+SET first_appeared = 1900 WHERE COALESCE(first_appeared,0) <= 0;
 
-/* Correcting lowest_price using minimum price from MenuItem for a Dish in Dish Table*/
+UPDATE DISH 
+SET last_appeared = first_appeared WHERE COALESCE(last_appeared,0) < first_appeared;
+*/
 
-WITH X as
+
+Select '    Updating Dish prices                               : 20897 rows affected'
+;
+/*
+UPDATE Dish
+FROM
 (
-select id, minPrice
-from 
-(
-        select Dish_New.id AS id, Dish_New.lowest_price AS lowest_price,   
-                min(MenuItem_New.price) AS minPrice 
-        from Dish_New 
-        inner join MenuItem_New 
-        on Dish_New.id == MenuItem_New.dish_id Group By MenuItem_New.dish_id
-) 
-where minPrice != lowest_price
-)
-Update Dish_New
-Set
-        lowest_price  = (SELECT minPrice from X where X.id = Dish_New.id)
-WHERE id IN (Select id from X);
+	SELECT id Src_Id, lowest_price, minPrice
+	FROM 
+	(
+	        SELECT 
+				D.id AS id, 
+				D.lowest_price AS lowest_price,   
+	            MIN(M.price) AS minPrice 
+	        FROM Dish D 
+	        INNER JOIN MenuItem M
+	        ON D.id = M.dish_id 
+			GROUP BY 1,2
+	) X 
+	WHERE 
+	(
+		minPrice < lowest_price
+		OR
+		(minPrice > lowest_price AND lowest_price = 0)
+	)
+	AND minPrice IS NOT NULL
+) X
+SET
+        lowest_price  = minPrice
+WHERE id = Src_Id;
 
-
-/* Correcting high_price in MenuItem (Query Takes Longer)*/
-
-WITH X as
-(
-select id, price from MenuItem_New where high_price < price
-)
-Update MenuItem_New
-Set
-        high_price  = (SELECT price from X where X.id = MenuItem_New.id)
-WHERE id IN (Select id from X);
-
-
+*/
 
 /*Correcting Dish Count in Menu*/
 
-
-WITH X as
+Select '    Updating Dish counts                               : 82967 rows affected';
+/*
+UPDATE Menu
+FROM
 (
-        Select MenuID, items 
-        from 
+        SELECT MenuID, items 
+        FROM 
         (
-                select Menu_New.id AS MenuID, count(MenuItem_New.id) AS items, dish_count 
-                from Menu_New inner join MenuPage_New 
-                on Menu_New.id == MenuPage_New.menu_id 
-                inner join MenuItem_New 
-                on MenuItem_New.menu_page_id == MenuPage_New.id Group By Menu_New.id
-        ) 
-        where items != dish_count
-)
-Update Menu_New
-Set
-        dish_count  = (SELECT items from X where X.MenuID = Menu_New.id)
-WHERE id IN (Select MenuID from X)
+                SELECT M.id AS MenuID, dish_count, COUNT(MI.id) AS items 
+                FROM Menu M
+				INNER JOIN MenuPage MP 
+                ON M.id = MP.menu_id 
+                INNER JOIN MenuItem MI 
+                ON MI.menu_page_id = MP.id 
+				GROUP BY 1,2
+        ) X
+        WHERE items <> dish_count
+) X
+SET
+        dish_count  = items
+WHERE id = MenuID
 ;
+*/
+
+
+Select '    Updating Dish Page counts                          : 214 rows affected';
 
 /*Correcting Page Count in Menu*/
-
-WITH X as
+/*
+UPDATE Menu
+FROM
 (
-        Select MenuID, pages 
-        from 
+        SELECT MenuID, pages , page_count
+        FROM 
         (
-                select Menu_New.id AS MenuID, count(menu_id) AS pages, page_count  
-                from Menu_New inner join MenuPage_New 
-                on Menu_New.id == MenuPage_New.Menu_id group by Menu_New.id
-        ) where pages != page_count
-)
-Update Menu_New
-Set
-        page_count  = (SELECT pages from X where X.MenuID = Menu_New.id)
-WHERE id IN (Select MenuID from X)
+                SELECT M.id AS MenuID, COUNT(MP.menu_id) AS pages, page_count  
+                FROM Menu M
+				INNER JOIN MenuPage MP 
+                ON M.id = MP.Menu_id 
+				GROUP BY 1,3
+				
+        ) X
+		WHERE pages <> page_count
+		
+) X
+SET
+        page_count  = X.Pages
+WHERE id = X.MenuId
 ;
 
-.save DATA/NYPL.db
+UPDATE MenuItem
+SET price = high_price
+WHERE COALESCE(price,-1) = -1
+AND COALESCE(high_price,-1) <> -1
+;
 
+UPDATE MenuItem
+FROM
+(
+        SELECT m.id Src_id, m.price old_price, d.lowest_price, d.highest_price, ROUND((d.lowest_price + d.highest_price)/2,2) Src_price
+        FROM MenuItem m
+        JOIN Dish d
+        ON m.dish_id = d.id
+        WHERE 1=1
+		AND COALESCE(m.price,0) <= 0
+        AND COALESCE(d.lowest_price,0) > 0
+        AND COALESCE(d.highest_price,0) > 0
+		
+) X
+SET price = Src_Price
+WHERE id = Src_Id
+;
+*/
+        
+/* Correcting high_price in MenuItem (Query Takes Longer)*/
+/*
+UPDATE MenuItem
+FROM
+(
+SELECT id Src_Id, price Src_Price FROM MenuItem WHERE COALESCE(high_price,-1) < price
+)
+X
+SET
+        high_price  = price
+WHERE id = Src_Id
+;
+
+UPDATE MenuItem
+FROM
+(
+        SELECT
+                M.id Src_Id, M.high_price, M.Dish_Id, Max_Price 
+        FROM    MenuItem M
+        JOIN
+        (
+                SELECT dish_id, MAX(price) Max_Price 
+                FROM MenuItem    
+                WHERE price IS NOT NULL
+                GROUP BY 1                
+        ) D
+        ON M.Dish_Id = D.Dish_ID
+        WHERE 1=1
+        AND   COALESCE(Max_Price,0) > 0
+        AND   COALESCE(m.high_price,-1) = -1
+        GROUP BY 1,2,3,4
+       
+)
+X
+SET
+        high_price  = Max_Price
+WHERE id = Src_Id
+;
+
+UPDATE MenuItem
+FROM
+(
+        SELECT
+                M.id Src_Id, M.price, M.Dish_Id, Max_Price 
+        FROM    MenuItem M
+        JOIN
+        (
+                SELECT dish_id, MIN(price) Max_Price 
+                FROM MenuItem    
+                WHERE price IS NOT NULL
+                GROUP BY 1                
+        ) D
+        ON M.Dish_Id = D.Dish_ID
+        WHERE 1=1
+        AND   COALESCE(Max_Price,0) > 0
+        AND   COALESCE(m.price,-1) = -1
+        GROUP BY 1,2,3,4
+       
+)
+X
+SET
+        price  = Max_Price
+WHERE id = Src_Id
+;
+
+UPDATE MenuItem
+SET high_price = Price
+WHERE high_price < Price
+;
+
+UPDATE MenuItem
+SET price = high_Price
+WHERE Price IS NULL
+AND high_price IS NOT NULL
+;
+*/
+
+Select '  * All Data Corrected with SQL-Lite'
+;
+Select '  * SQL-Lite DB Exported'
+;
