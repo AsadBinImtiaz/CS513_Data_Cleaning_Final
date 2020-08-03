@@ -3,11 +3,32 @@ DROP TABLE IF EXISTS Menu;
 DROP TABLE IF EXISTS MenuItem;
 DROP TABLE IF EXISTS MenuPage;
 
+
+# @BEGIN SQLWorkflow
+
+
+# @BEGIN ImportDatafromCSV
+# @IN Dish @URI file:Data/Dish.csv
+# @IN Menu @URI file:Data/Menu.csv
+# @IN MenuPage @URI file:Data/MenuPage.csv
+# @IN MenuItem @URI file:Data/MenuItem.csv
+# @OUT Dish 
+# @OUT Menu  
+# @OUT MenuPage
+# @OUT MenuItem  
+# @END ImportDatafromCSV
+
 .mode csv
 
 SELECT '    Truncating Dish Names Longer than 500 Characters'
 ;
 /*
+
+# @BEGIN CleanDish
+# @IN Dish 
+# @OUT Dish_New 
+# @END CreateDish
+
 UPDATE Dish SET NAME = TRIM('Nelson''S Blood (Cocktail)                                              ') WHERE ID = 402726	;
 UPDATE Dish SET NAME = TRIM('Tio Pepe Sherry                                                         ') WHERE ID = 408306	;
 UPDATE Dish SET NAME = TRIM('Our Game Plan                                                           ') WHERE ID = 417683	;
@@ -150,7 +171,7 @@ CREATE TABLE Dish
 	first_appeared 	INTEGER NOT NULL,  
 	last_appeared  	INTEGER NOT NULL,  
 	lowest_price 	DECIMAL(18,2) NOT NULL, 
-        highest_price 	DECIMAL(18,2) NOT NULL
+    highest_price 	DECIMAL(18,2) NOT NULL
 )
 UNIQUE PRIMARY INDEX (id)
 ;
@@ -164,6 +185,12 @@ SELECT '  * Dish table corrected'
 ;
 
 /*
+
+# @BEGIN CleanMenu
+# @IN Menu 
+# @OUT Menu_New 
+# @END CleanMenu
+
 UPDATE Menu SET sponsor = OREPLACE(OREPLACE(OREPLACE(OREPLACE(sponsor,'""""','"'),'\',''),'""','"'),'"','');
 UPDATE Menu SET event = OREPLACE(OREPLACE(OREPLACE(OREPLACE(event,'""""','"'),'\',''),'""','"'),'"','');
 UPDATE Menu SET venue = OREPLACE(OREPLACE(OREPLACE(OREPLACE(venue,'""""','"'),'\',''),'""','"'),'"','');
@@ -265,6 +292,13 @@ Select '  * Menu Table Corrected';
 Select '    MenuPage.pagenumbers resequenced                   : 175 rows affected';  
 
 /*
+
+# @BEGIN CleanMenuPage
+# @IN MenuPage 
+# @OUT MenuPage_New 
+# @END CleanMenuPage
+
+
 UPDATE MenuPage
 FROM 
 (
@@ -302,6 +336,13 @@ Select '    Correcting price > high_price                      : 2378 rows affec
 Select '    Correcting created_at > updated_at                 : 2874 rows affected';
 
 /*
+
+# @BEGIN CleanMenuItem
+# @IN MenuItem 
+# @OUT MenuItem_New 
+# @END CleanMenuItem
+
+
 UPDATE MenuItem
 SET high_price = price
 WHERE price > high_price
@@ -320,7 +361,6 @@ AND price IS NOT NULL
 */
 
 Select '  * MenuItem Table Corrected';
-
 
 Select '    Consolidating dishes                               : 36701 rows affected';
 Select '    Consolidating MeniItems                            : 23371 rows affected';
@@ -600,8 +640,112 @@ FROM
 SET price = Src_Price
 WHERE id = Src_Id
 ;
-*/
         
+Update Dish_New
+Set
+        times_appeared  = (SELECT times from X where X.id = Dish_New.id)
+WHERE id IN (Select id from X);
+*/
+
+/*Correcting menus_appeared in Table Dish (Query Takes Longer)*/
+/*
+WITH X as
+(
+        select id, menu_times
+        from Dish_New
+        inner join
+        (
+	        select dish_id, count(menu_id) AS menu_times 
+	        from MenuItem_New 
+	        inner join MenuPage_New 
+	        on MenuItem_New.menu_page_id = MenuPage_New.id 
+	        Group By dish_id
+     
+        )
+        on dish_id == id
+        WHERE menu_times != menus_appeared
+)
+Update Dish_New
+Set
+        menus_appeared  = (SELECT menu_times from X where X.id = Dish_New.id)
+WHERE id IN (Select id from X);
+*/
+
+
+/*Correcting first_appeared in Table Dish*/
+/*
+WITH X as
+(
+        select id, strftime('%Y', minDate) AS newYear
+        from Dish_New
+        inner join
+        (
+	        Select dish_id, min(Menu_New.date) AS minDate
+		from MenuItem_New 
+		inner join MenuPage_New on MenuItem_New.menu_page_id = MenuPage_New.id 
+		inner join Menu_New on MenuPage_New.menu_id == Menu_New.id 
+		Group By dish_id
+        )
+        on dish_id == id
+        WHERE strftime('%Y', minDate) != first_appeared
+)
+Update Dish_New
+Set
+        first_appeared  = (SELECT newYear from X where X.id = Dish_New.id)
+WHERE id IN (Select id from X);
+*/
+
+/*Correcting last_appeared in Table Dish*/ -- Corrected
+
+/*
+WITH X as
+(
+        select id, strftime('%Y', maxDate) AS newYear
+        from Dish_New
+        inner join
+        (
+	    Select dish_id, max(Menu_New.date) AS maxDate
+		from MenuItem_New 
+		inner join MenuPage_New on MenuItem_New.menu_page_id = MenuPage_New.id 
+		inner join Menu_New on MenuPage_New.menu_id == Menu_New.id 
+		Group By dish_id
+        )
+        on dish_id == id
+        WHERE strftime('%Y', maxDate) != last_appeared
+)
+Update Dish_New
+Set
+        last_appeared  = (SELECT newYear from X where X.id = Dish_New.id)
+WHERE id IN (Select id from X);
+
+
+*/
+/* Correcting lowest_price using minimum price from MenuItem for a Dish in Dish Table*/
+
+/*
+WITH X as
+(
+select id, minPrice
+from 
+(
+        select Dish_New.id AS id, Dish_New.lowest_price AS lowest_price,   
+                min(MenuItem_New.price) AS minPrice 
+        from Dish_New 
+        inner join MenuItem_New 
+        on Dish_New.id == MenuItem_New.dish_id Group By MenuItem_New.dish_id
+) 
+where minPrice != lowest_price
+)
+Update Dish_New
+Set
+        lowest_price  = (SELECT minPrice from X where X.id = Dish_New.id)
+WHERE id IN (Select id from X);
+*/
+
+
+
+
+
 /* Correcting high_price in MenuItem (Query Takes Longer)*/
 /*
 UPDATE MenuItem
@@ -683,3 +827,20 @@ Select '  * All Data Corrected with SQL-Lite'
 ;
 Select '  * SQL-Lite DB Exported'
 ;
+
+# @BEGIN SaveNYPL.db
+# @IN Menu_New
+# @IN MenuItem_New
+# @IN Dish_New 
+# @IN MenuPage_New
+
+# @OUT NYPL.db 
+
+# @END SaveNYPL.db
+
+
+.save DATA/NYPL.db
+
+
+# @END SQLWorkflow
+
