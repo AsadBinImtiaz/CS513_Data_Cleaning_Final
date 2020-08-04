@@ -29,7 +29,6 @@ cd ..
 
 cd "06_Data_Provenance"
 rm -r Data/*.csv > /dev/null 2>&1
-rm -r Data/*.zip > /dev/null 2>&1
 cd ..
 
 echo "End of Cleanup"

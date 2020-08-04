@@ -1,0 +1,167 @@
+
+/* Start of top-level graph */
+digraph Workflow {
+rankdir=TB
+
+/* Title for graph */
+fontname=Helvetica; fontsize=18; labelloc=t
+label=NYPL_SQL_Workflow
+
+/* Start of double cluster for drawing box around nodes in workflow */
+subgraph cluster_workflow_box_outer { label=""; color=black; penwidth=2
+subgraph cluster_workflow_box_inner { label=""; penwidth=0
+
+/* Style for nodes representing atomic programs in workflow */
+node[shape=box style=filled fillcolor="#CCFFCC" peripheries=1 fontname=Helvetica]
+
+/* Nodes representing atomic programs in workflow */
+Import_Dish_in_SQLLite [shape=record rankdir=LR label="{<f0> Import_Dish_in_SQLLite |<f1> Import Dish.csv in SQLLite Dish table.}"];
+Import_Menu_in_SQLLite [shape=record rankdir=LR label="{<f0> Import_Menu_in_SQLLite |<f1> Import Menu.csv in SQLLite Menu table.}"];
+Import_MenuPage_in_SQLLite [shape=record rankdir=LR label="{<f0> Import_MenuPage_in_SQLLite |<f1> Import MenuPage.csv in SQLLite MenuPage table.}"];
+Import_MenuItem_in_SQLLite [shape=record rankdir=LR label="{<f0> Import_MenuItem_in_SQLLite |<f1> Import MenuItem.csv in SQLLite MenuItem table.}"];
+Fix_Dish_in_SQLLite [shape=record rankdir=LR label="{<f0> Fix_Dish_in_SQLLite |<f1> Fix Dish table in SQLLite\n * Truncate Dish names\n * Adjust FirstApperaed/LastAppeared.}"];
+Fix_Menu_in_SQLLite [shape=record rankdir=LR label="{<f0> Fix_Menu_in_SQLLite |<f1> Fix Menu table in SQLLite\n * Correct Invalid Characters\n * Adjust Counts.}"];
+Fix_MenuItem_in_SQLLite [shape=record rankdir=LR label="{<f0> Fix_MenuItem_in_SQLLite |<f1> Fix MenuItem table in SQLLite\n * Adjust created/updated times \n * Adjust Counts.}"];
+Fix_MenuPage_in_SQLLite [shape=record rankdir=LR label="{<f0> Fix_MenuPage_in_SQLLite |<f1> Fix MenuPage table in SQLLite\n * Adjust page number sequences.}"];
+Consolidate_Records [shape=record rankdir=LR label="{<f0> Consolidate_Records |<f1> Consolidate Dish/MenuItem/Menupage table in SQLLite\n Merge records with same Ids.}"];
+Consolidate_Dates [shape=record rankdir=LR label="{<f0> Consolidate_Dates |<f1> Consolidate Dish/Menu/Menupage table in SQLLite\n Adjust date intervals.}"];
+Fix_RI [shape=record rankdir=LR label="{<f0> Fix_RI |<f1> Fix RI Dish/Menu/Menupage.MenuItem table in SQLLite\n Enforce RI constraints.}"];
+Export_dish_table_from_SQLLite [shape=record rankdir=LR label="{<f0> Export_dish_table_from_SQLLite |<f1> Export SQLLite dish table to csv.}"];
+Export_menu_table_from_SQLLite [shape=record rankdir=LR label="{<f0> Export_menu_table_from_SQLLite |<f1> Export SQLLite menu table to csv.}"];
+Export_menuitem_table_from_SQLLite [shape=record rankdir=LR label="{<f0> Export_menuitem_table_from_SQLLite |<f1> Export SQLLite menuitem table to csv.}"];
+Export_menupage_table_from_SQLLite [shape=record rankdir=LR label="{<f0> Export_menupage_table_from_SQLLite |<f1> Export SQLLite menupage table to csv.}"];
+
+/* Style for nodes representing non-parameter data channels in workflow */
+node[shape=box style="rounded,filled" fillcolor="#FFFFCC" peripheries=1 fontname=Helvetica]
+
+/* Nodes for non-parameter data channels in workflow */
+"Dish_out.csv" [shape=record rankdir=LR label="{<f0> Dish_out.csv |<f1> file\://Data/Dish.csv}"];
+"Menu_out.csv" [shape=record rankdir=LR label="{<f0> Menu_out.csv |<f1> file\://Data/Menu.csv}"];
+"MenuItem_out.csv" [shape=record rankdir=LR label="{<f0> MenuItem_out.csv |<f1> file\://Data/MenuItem.csv}"];
+"MenuPage_out.csv" [shape=record rankdir=LR label="{<f0> MenuPage_out.csv |<f1> file\://Data/MenuPage.csv}"];
+"Dish.csv"
+"Menu.csv"
+"MenuPage.csv"
+"MenuItem.csv"
+Dish_Imp [shape=record rankdir=LR label="{<f0> Dish_Imp |<f1> sqllite\://NYPL.db/Dish}"];
+Menu_Imp [shape=record rankdir=LR label="{<f0> Menu_Imp |<f1> sqllite\://NYPL.db/Menu}"];
+MenuItem_Imp [shape=record rankdir=LR label="{<f0> MenuItem_Imp |<f1> sqllite\://NYPL.db/MenuItem}"];
+MenuPage_Imp [shape=record rankdir=LR label="{<f0> MenuPage_Imp |<f1> sqllite\://NYPL.db/MenuPage}"];
+MenuPage_clean [shape=record rankdir=LR label="{<f0> MenuPage_clean |<f1> sqllite\://NYPL.db/MenuPage}"];
+Dish_clean [shape=record rankdir=LR label="{<f0> Dish_clean |<f1> sqllite\://NYPL.db/Dish}"];
+MenuItem_clean [shape=record rankdir=LR label="{<f0> MenuItem_clean |<f1> sqllite\://NYPL.db/MenuItem}"];
+Menu_clean [shape=record rankdir=LR label="{<f0> Menu_clean |<f1> sqllite\://NYPL.db/Menu}"];
+Dish [shape=record rankdir=LR label="{<f0> Dish |<f1> sqllite\://NYPL.db/Dish}"];
+Menu [shape=record rankdir=LR label="{<f0> Menu |<f1> sqllite\://NYPL.db/Menu}"];
+MenuItem [shape=record rankdir=LR label="{<f0> MenuItem |<f1> sqllite\://NYPL.db/MenuItem}"];
+MenuPage [shape=record rankdir=LR label="{<f0> MenuPage |<f1> sqllite\://NYPL.db/MenuPage}"];
+
+/* Style for nodes representing parameter channels in workflow */
+node[shape=box style="rounded,filled" fillcolor="#FCFCFC" peripheries=1 fontname=Helvetica]
+
+/* Nodes representing parameter channels in workflow */
+
+/* Edges representing connections between programs and channels */
+Import_Dish_in_SQLLite -> Dish_Imp
+"Tools/SQLLite" -> Import_Dish_in_SQLLite
+"SQL/importdata.sh" -> Import_Dish_in_SQLLite
+"Dish.csv" -> Import_Dish_in_SQLLite
+Import_Menu_in_SQLLite -> Menu_Imp
+"Tools/SQLLite" -> Import_Menu_in_SQLLite
+"SQL/importdata.sh" -> Import_Menu_in_SQLLite
+"Menu.csv" -> Import_Menu_in_SQLLite
+Import_MenuPage_in_SQLLite -> MenuPage_Imp
+"Tools/SQLLite" -> Import_MenuPage_in_SQLLite
+"SQL/importdata.sh" -> Import_MenuPage_in_SQLLite
+"MenuPage.csv" -> Import_MenuPage_in_SQLLite
+Import_MenuItem_in_SQLLite -> MenuItem_Imp
+"Tools/SQLLite" -> Import_MenuItem_in_SQLLite
+"SQL/importdata.sh" -> Import_MenuItem_in_SQLLite
+"MenuItem.csv" -> Import_MenuItem_in_SQLLite
+Fix_Dish_in_SQLLite -> Dish_clean
+"SQL/data.sql" -> Fix_Dish_in_SQLLite
+Dish_Imp -> Fix_Dish_in_SQLLite
+Fix_Menu_in_SQLLite -> Menu_clean
+"SQL/menu.sql" -> Fix_Menu_in_SQLLite
+Menu_Imp -> Fix_Menu_in_SQLLite
+Fix_MenuItem_in_SQLLite -> MenuItem_clean
+"SQL/menuitem.sql" -> Fix_MenuItem_in_SQLLite
+MenuItem_Imp -> Fix_MenuItem_in_SQLLite
+Fix_MenuPage_in_SQLLite -> MenuPage_clean
+"SQL/menupage.sql" -> Fix_MenuPage_in_SQLLite
+MenuPage_Imp -> Fix_MenuPage_in_SQLLite
+Consolidate_Records -> MenuPage
+Consolidate_Records -> MenuItem
+Consolidate_Records -> Dish
+"SQL/all.sql" -> Consolidate_Records
+MenuPage_clean -> Consolidate_Records
+Dish_clean -> Consolidate_Records
+MenuItem_clean -> Consolidate_Records
+Consolidate_Dates -> MenuPage
+Consolidate_Dates -> Menu
+Consolidate_Dates -> Dish
+"SQL/all.sql" -> Consolidate_Dates
+MenuPage_clean -> Consolidate_Dates
+Dish_clean -> Consolidate_Dates
+Menu_clean -> Consolidate_Dates
+Fix_RI -> MenuPage
+Fix_RI -> MenuItem
+Fix_RI -> Menu
+Fix_RI -> Dish
+"SQL/all.sql" -> Fix_RI
+MenuPage_clean -> Fix_RI
+Dish_clean -> Fix_RI
+Menu_clean -> Fix_RI
+MenuItem_clean -> Fix_RI
+Export_dish_table_from_SQLLite -> "Dish_out.csv"
+SQLLite -> Export_dish_table_from_SQLLite
+"SQL/exportdata.sh" -> Export_dish_table_from_SQLLite
+Dish -> Export_dish_table_from_SQLLite
+Export_menu_table_from_SQLLite -> "Menu_out.csv"
+SQLLite -> Export_menu_table_from_SQLLite
+"SQL/exportdata.sh" -> Export_menu_table_from_SQLLite
+Menu -> Export_menu_table_from_SQLLite
+Export_menuitem_table_from_SQLLite -> "MenuItem_out.csv"
+SQLLite -> Export_menuitem_table_from_SQLLite
+"SQL/exportdata.sh" -> Export_menuitem_table_from_SQLLite
+MenuItem -> Export_menuitem_table_from_SQLLite
+Export_menupage_table_from_SQLLite -> "MenuPage_out.csv"
+SQLLite -> Export_menupage_table_from_SQLLite
+"SQL/exportdata.sh" -> Export_menupage_table_from_SQLLite
+MenuPage -> Export_menupage_table_from_SQLLite
+
+/* End of double cluster for drawing box around nodes in workflow */
+}}
+
+/* Style for nodes representing workflow input ports */
+node[shape=circle style="rounded,filled" fillcolor="#FFFFFF" peripheries=1 fontname=Helvetica width=0.2]
+
+/* Nodes representing workflow input ports */
+"Dish.csv_input_port" [label=""]
+"Menu.csv_input_port" [label=""]
+"MenuItem.csv_input_port" [label=""]
+"MenuPage.csv_input_port" [label=""]
+
+/* Style for nodes representing workflow output ports */
+node[shape=circle style="rounded,filled" fillcolor="#FFFFFF" peripheries=1 fontname=Helvetica width=0.2]
+
+/* Nodes representing workflow output ports */
+"Dish_out.csv_output_port" [label=""]
+"Menu_out.csv_output_port" [label=""]
+"MenuItem_out.csv_output_port" [label=""]
+"MenuPage_out.csv_output_port" [label=""]
+
+/* Edges from input ports to channels */
+"Dish.csv_input_port" -> "Dish.csv"
+"Menu.csv_input_port" -> "Menu.csv"
+"MenuItem.csv_input_port" -> "MenuItem.csv"
+"MenuPage.csv_input_port" -> "MenuPage.csv"
+
+/* Edges from channels to output ports */
+"Dish_out.csv" -> "Dish_out.csv_output_port"
+"Menu_out.csv" -> "Menu_out.csv_output_port"
+"MenuItem_out.csv" -> "MenuItem_out.csv_output_port"
+"MenuPage_out.csv" -> "MenuPage_out.csv_output_port"
+
+/* End of top-level graph */
+}

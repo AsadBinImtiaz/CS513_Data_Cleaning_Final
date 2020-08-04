@@ -3,10 +3,11 @@ DROP TABLE IF EXISTS Menu;
 DROP TABLE IF EXISTS MenuItem;
 DROP TABLE IF EXISTS MenuPage;
 
-
+/*
 # @BEGIN SQLWorkflow
+*/
 
-
+/*
 # @BEGIN ImportDatafromCSV
 # @IN Dish @URI file:Data/Dish.csv
 # @IN Menu @URI file:Data/Menu.csv
@@ -17,6 +18,7 @@ DROP TABLE IF EXISTS MenuPage;
 # @OUT MenuPage
 # @OUT MenuItem  
 # @END ImportDatafromCSV
+*/
 
 .mode csv
 

@@ -1,0 +1,123 @@
+# @begin NYPL_SQL_Workflow @desc Workflow for Cleaning NYPL dataset in SQL Lite
+# @in  Dish.csv      @desc file://Data/Dish.csv
+# @in  Menu.csv      @desc file://Data/Menu.csv
+# @in  MenuItem.csv  @desc file://Data/MenuPage.csv
+# @in  MenuPage.csv  @desc file://Data/MenuItem.csv
+# @out Dish_out.csv     @desc file://Data/Dish.csv
+# @out Menu_out.csv     @desc file://Data/Menu.csv
+# @out MenuItem_out.csv @desc file://Data/MenuPage.csv
+# @out MenuPage_out.csv @desc file://Data/MenuItem.csv
+
+# @begin Import_Dish_in_SQLLite @desc Import Dish.csv in SQLLite Dish table.
+# @param Tools/SQLLite
+# @param SQL/importdata.sh
+# @in    Dish.csv     @desc file://Data/Dish.csv
+# @out   Dish_Imp     @file sqllite://NYPL.db/Dish
+# @end   Import_Dish_in_SQLLite
+
+# @begin Import_Menu_in_SQLLite @desc Import Menu.csv in SQLLite Menu table.
+# @param Tools/SQLLite
+# @param SQL/importdata.sh
+# @in    Menu.csv     @desc file://Data/Menu.csv
+# @out   Menu_Imp     @file sqllite://NYPL.db/Menu
+# @end   Import_Menu_in_SQLLite
+
+# @begin Import_MenuPage_in_SQLLite @desc Import MenuPage.csv in SQLLite MenuPage table.
+# @param Tools/SQLLite
+# @param SQL/importdata.sh
+# @in    MenuPage.csv     @desc file://Data/MenuPage.csv
+# @out   MenuPage_Imp     @file sqllite://NYPL.db/MenuPage
+# @end   Import_MenuPage_in_SQLLite
+
+# @begin Import_MenuItem_in_SQLLite @desc Import MenuItem.csv in SQLLite MenuItem table.
+# @param Tools/SQLLite
+# @param SQL/importdata.sh
+# @in    MenuItem.csv     @desc file://Data/MenuItem.csv
+# @out   MenuItem_Imp     @file sqllite://NYPL.db/MenuItem
+# @end   Import_MenuItem_in_SQLLite
+
+# @begin Fix_Dish_in_SQLLite @desc Fix Dish table in SQLLite\n * Truncate Dish names\n * Adjust FirstApperaed/LastAppeared.
+# @param SQL/data.sql
+# @in    Dish_Imp   @file sqllite://NYPL.db/Dish
+# @out   Dish_clean @file sqllite://NYPL.db/Dish
+# @end   Fix_Dish_in_SQLLite
+
+# @begin Fix_Menu_in_SQLLite @desc Fix Menu table in SQLLite\n * Correct Invalid Characters\n * Adjust Counts.
+# @param SQL/menu.sql
+# @in    Menu_Imp   @file sqllite://NYPL.db/Menu
+# @out   Menu_clean @file sqllite://NYPL.db/Menu
+# @end   Fix_Menu_in_SQLLite
+
+# @begin Fix_MenuItem_in_SQLLite @desc Fix MenuItem table in SQLLite\n * Adjust created/updated times \n * Adjust Counts.
+# @param SQL/menuitem.sql
+# @in    MenuItem_Imp   @file sqllite://NYPL.db/MenuItem
+# @out   MenuItem_clean @file sqllite://NYPL.db/MenuItem
+# @end   Fix_MenuItem_in_SQLLite
+
+# @begin Fix_MenuPage_in_SQLLite @desc Fix MenuPage table in SQLLite\n * Adjust page number sequences.
+# @param SQL/menupage.sql
+# @in    MenuPage_Imp   @file sqllite://NYPL.db/MenuPage
+# @out   MenuPage_clean @file sqllite://NYPL.db/MenuPage
+# @end   Fix_MenuPage_in_SQLLite
+
+# @begin Consolidate_Records @desc Consolidate Dish/MenuItem/Menupage table in SQLLite\n Merge records with same Ids.
+# @param SQL/all.sql
+# @in    MenuPage_clean @file sqllite://NYPL.db/MenuPage
+# @in    Dish_clean     @file sqllite://NYPL.db/Dish
+# @in    MenuItem_clean @file sqllite://NYPL.db/MenuItem
+# @out   MenuPage       @file sqllite://NYPL.db/MenuPage
+# @out   MenuItem       @file sqllite://NYPL.db/MenuItem
+# @out   Dish           @file sqllite://NYPL.db/Dish
+# @end   Consolidate_Records
+
+# @begin Consolidate_Dates @desc Consolidate Dish/Menu/Menupage table in SQLLite\n Adjust date intervals.
+# @param SQL/all.sql
+# @in    MenuPage_clean @file sqllite://NYPL.db/MenuPage
+# @in    Dish_clean     @file sqllite://NYPL.db/Dish
+# @in    Menu_clean     @file sqllite://NYPL.db/Menu
+# @out   MenuPage       @file sqllite://NYPL.db/MenuPage
+# @out   Menu           @file sqllite://NYPL.db/Menu
+# @out   Dish           @file sqllite://NYPL.db/Dish
+# @end   Consolidate_Dates
+
+# @begin Fix_RI @desc Fix RI Dish/Menu/Menupage.MenuItem table in SQLLite\n Enforce RI constraints.
+# @param SQL/all.sql
+# @in    MenuPage_clean @file sqllite://NYPL.db/MenuPage
+# @in    Dish_clean     @file sqllite://NYPL.db/Dish
+# @in    Menu_clean     @file sqllite://NYPL.db/Menu
+# @in    MenuItem_clean @file sqllite://NYPL.db/MenuItem
+# @out   MenuPage       @file sqllite://NYPL.db/MenuPage
+# @out   MenuItem       @file sqllite://NYPL.db/MenuItem
+# @out   Menu           @file sqllite://NYPL.db/Menu
+# @out   Dish           @file sqllite://NYPL.db/Dish
+# @end   Fix_RI
+
+# @begin Export_dish_table_from_SQLLite @desc Export SQLLite dish table to csv.
+# @param SQLLite
+# @param SQL/exportdata.sh
+# @in    Dish          @desc sqllite://NYPL.db/Dish
+# @out   Dish_out.csv  @file file://Data/Dish.csv
+# @end   Export_dish_table_from_SQLLitee
+
+# @begin Export_menu_table_from_SQLLite @desc Export SQLLite menu table to csv.
+# @param SQLLite
+# @param SQL/exportdata.sh
+# @in    Menu          @desc sqllite://NYPL.db/Menu
+# @out   Menu_out.csv  @file file://Data/Menu.csv
+# @end   Export_menu_table_from_SQLLitee
+
+# @begin Export_menuitem_table_from_SQLLite @desc Export SQLLite menuitem table to csv.
+# @param SQLLite
+# @param SQL/exportdata.sh
+# @in    MenuItem          @desc sqllite://NYPL.db/MenuItem
+# @out   MenuItem_out.csv  @file file://Data/MenuItem.csv
+# @end   Export_menuitem_table_from_SQLLitee
+
+# @begin Export_menupage_table_from_SQLLite @desc Export SQLLite menupage table to csv.
+# @param SQLLite
+# @param SQL/exportdata.sh
+# @in    MenuPage          @desc sqllite://NYPL.db/MenuPage
+# @out   MenuPage_out.csv  @file file://Data/MenuPage.csv
+# @end   Export_menupage_table_from_SQLLitee
+
+# @end NYPL_SQL_Workflow

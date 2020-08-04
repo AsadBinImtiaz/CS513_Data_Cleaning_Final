@@ -95,10 +95,10 @@ echo '####################################'
 cd "05_Workflow_Model"
  
 echo '* Extract Open Refine Cleansed Data with python to: Tasks/05_Workflow_Model/Data'
-python "Python/ExtractData.py" > /dev/null 2>&1
+python "Python/ExtractData.py" #> /dev/null 2>&1
 
 echo '* Saving Zip Archive to: Tasks/05_Workflow_Model/Data'
-python "Python/ZipTaskData.py" > /dev/null 2>&1
+python "Python/ZipTaskData.py" #> /dev/null 2>&1
 
 cd ..
 

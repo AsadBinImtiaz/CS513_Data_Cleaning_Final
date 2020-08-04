@@ -1,0 +1,88 @@
+
+/* Start of top-level graph */
+digraph Workflow {
+rankdir=TB
+
+/* Title for graph */
+fontname=Helvetica; fontsize=18; labelloc=t
+label="NYPL\_Data\_Cleansing\_Workflow"
+
+/* Start of double cluster for drawing box around nodes in workflow */
+subgraph cluster_workflow_box_outer { label=""; color=black; penwidth=2
+subgraph cluster_workflow_box_inner { label=""; penwidth=0
+
+/* Style for nodes representing atomic programs in workflow */
+node[shape=box style=filled fillcolor="#CCFFCC" peripheries=1 fontname=Helvetica]
+
+/* Nodes representing atomic programs in workflow */
+"01\_Initial\_Assesment" [shape=record rankdir=LR label="{<f0> 01\_Initial\_Assesment |<f1> Initial Data Assesment.}"];
+"02\_OpenRefine\_Cleansing" [shape=record rankdir=LR label="{<f0> 02\_OpenRefine\_Cleansing |<f1> Cleansing with Open Refine Tool.}"];
+"03\_Data\_Cleansing\_Other\_Tools" [shape=record rankdir=LR label="{<f0> 03\_Data\_Cleansing\_Other\_Tools |<f1> Cleansing (e.g. RegEx, Formats etc.) with Python.}"];
+"04\_Developing\_Relational\_Schema" [shape=record rankdir=LR label="{<f0> 04\_Developing\_Relational\_Schema |<f1> Cleansing in SQLLite.}"];
+"05\_Workflow\_Model" [shape=record rankdir=LR label="{<f0> 05\_Workflow\_Model |<f1> Cleansing in YesWorkFlow.}"];
+"06\_Data\_Provenance" [shape=record rankdir=LR label="{<f0> 06\_Data\_Provenance |<f1> Data Proveenance.}"];
+
+/* Style for nodes representing non-parameter data channels in workflow */
+node[shape=box style="rounded,filled" fillcolor="#FFFFCC" peripheries=1 fontname=Helvetica]
+
+/* Nodes for non-parameter data channels in workflow */
+"Tasks/06\_Data\_Provenance/Data/${filename}" [shape=record rankdir=LR label="{<f0> Tasks/06\_Data\_Provenance/Data/$\{filename\} |<f1> stream\:filestream}"];
+"@{Raw_Data_Dir}"
+"Tasks/01\_Initial\_Assesment/Data/${filename}" [shape=record rankdir=LR label="{<f0> Tasks/01\_Initial\_Assesment/Data/$\{filename\} |<f1> stream\:filestream}"];
+"Tasks/02\_OpenRefine\_Cleansing/Data/${filename}" [shape=record rankdir=LR label="{<f0> Tasks/02\_OpenRefine\_Cleansing/Data/$\{filename\} |<f1> stream\:filestream}"];
+"Tasks/03\_Data\_Cleansing\_Other\_Tools/Data/${filename}" [shape=record rankdir=LR label="{<f0> Tasks/03\_Data\_Cleansing\_Other\_Tools/Data/$\{filename\} |<f1> stream\:filestream}"];
+"Tasks/04\_Developing\_Relational\_Schema/Data/${filename}" [shape=record rankdir=LR label="{<f0> Tasks/04\_Developing\_Relational\_Schema/Data/$\{filename\} |<f1> stream\:filestream}"];
+"Tasks/05\_Workflow\_Model/Data/${filename}" [shape=record rankdir=LR label="{<f0> Tasks/05\_Workflow\_Model/Data/$\{filename\} |<f1> stream\:filestream}"];
+
+/* Style for nodes representing parameter channels in workflow */
+node[shape=box style="rounded,filled" fillcolor="#FCFCFC" peripheries=1 fontname=Helvetica]
+
+/* Nodes representing parameter channels in workflow */
+"${filename}"
+
+/* Edges representing connections between programs and channels */
+"01\_Initial\_Assesment" -> "Tasks/01\_Initial\_Assesment/Data/${filename}"
+"@{Raw_Data_Dir}" -> "01\_Initial\_Assesment"
+"${filename}" -> "01\_Initial\_Assesment"
+"02\_OpenRefine\_Cleansing" -> "Tasks/02\_OpenRefine\_Cleansing/Data/${filename}"
+"Tasks/01\_Initial\_Assesment/Data/${filename}" -> "02\_OpenRefine\_Cleansing"
+OpenRefine -> "02\_OpenRefine\_Cleansing"
+"03\_Data\_Cleansing\_Other\_Tools" -> "Tasks/03\_Data\_Cleansing\_Other\_Tools/Data/${filename}"
+"Tasks/02\_OpenRefine\_Cleansing/Data/${filename}" -> "03\_Data\_Cleansing\_Other\_Tools"
+Python -> "03\_Data\_Cleansing\_Other\_Tools"
+"04\_Developing\_Relational\_Schema" -> "Tasks/04\_Developing\_Relational\_Schema/Data/${filename}"
+"Tasks/03\_Data\_Cleansing\_Other\_Tools/Data/${filename}" -> "04\_Developing\_Relational\_Schema"
+SQLLite -> "04\_Developing\_Relational\_Schema"
+"05\_Workflow\_Model" -> "Tasks/05\_Workflow\_Model/Data/${filename}"
+"Tasks/04\_Developing\_Relational\_Schema/Data/${filename}" -> "05\_Workflow\_Model"
+SQLLite -> "05\_Workflow\_Model"
+"06\_Data\_Provenance" -> "Tasks/06\_Data\_Provenance/Data/${filename}"
+"Tasks/05\_Workflow\_Model/Data/${filename}" -> "06\_Data\_Provenance"
+SQLLite -> "06\_Data\_Provenance"
+DataLog -> "06\_Data\_Provenance"
+
+/* End of double cluster for drawing box around nodes in workflow */
+}}
+
+/* Style for nodes representing workflow input ports */
+node[shape=circle style="rounded,filled" fillcolor="#FFFFFF" peripheries=1 fontname=Helvetica width=0.2]
+
+/* Nodes representing workflow input ports */
+"@{Raw_Data_Dir}_input_port" [label=""]
+"${filename}_input_port" [label=""]
+
+/* Style for nodes representing workflow output ports */
+node[shape=circle style="rounded,filled" fillcolor="#FFFFFF" peripheries=1 fontname=Helvetica width=0.2]
+
+/* Nodes representing workflow output ports */
+"Tasks/06\_Data\_Provenance/Data/${filename}_output_port" [label=""]
+
+/* Edges from input ports to channels */
+"@{Raw_Data_Dir}_input_port" -> "@{Raw_Data_Dir}"
+"${filename}_input_port" -> "${filename}"
+
+/* Edges from channels to output ports */
+"Tasks/06\_Data\_Provenance/Data/${filename}" -> "Tasks/06\_Data\_Provenance/Data/${filename}_output_port"
+
+/* End of top-level graph */
+}
