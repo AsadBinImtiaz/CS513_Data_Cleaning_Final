@@ -33,11 +33,17 @@ The goal of this project was to use open souce and freely available tools to cle
 The project work was divided into multiple tasks. Below is the task breakdown:
 
 •	Overview and initial assessment of the dataset.
+
 •	Data cleaning with Open-Refine.
+
 •	Data cleaning with other tools.
+
 •	Developing a relational schema.
+
 •	Creating a workflow model.
+
 •	Developing provenance.
+
 
 ## Project Setup
 
@@ -45,3 +51,6 @@ The project directories are set up hierarchically. The raw data is present in th
 
 Each of the above 6 tasks has a subdirectory in the Tasks/ directory. The project is set up in a directory structure where each of the above 6 tasks has their Data/ directories, under the Tasks/<Task_Name>/ directory in the project root directory. The First task, takes the data from the Raw Data directory in the root project folder (<Root>/Data/) and stores processed data in its local directory (<Root>/Tasks/<Task_Name>/Data/). Each subsequent task takes the data from the preceding task’s Data directory and stores it in its own Data directory after processing.
   
+## The Dataset
+
+NYPL Labs, "What's on the menu Dataset," 16 June 2020. Available at: http://menus.nypl.org/data.
